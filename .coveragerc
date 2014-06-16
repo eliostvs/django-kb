@@ -1,0 +1,6 @@
+[run]
+omit =
+    */test*
+    */migrations/*
+
+source = knowledge
