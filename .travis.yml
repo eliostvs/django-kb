@@ -9,5 +9,7 @@ script: tox
 after_success: coveralls
 
 env:
-    - TOXENV=py27-django16
-    - TOXENV=py33-django16
+    - TOXENV=py27-django1.6
+    - TOXENV=py33-django1.6
+    - TOXENV=py34-django1.6
+    - TOXENV=coverage
