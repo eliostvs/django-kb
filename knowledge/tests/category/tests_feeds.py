@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.utils.timezone import utc
 from model_mommy import mommy
 
 from knowledge.base.test import ViewTestCase
@@ -23,7 +24,7 @@ class TestCategoryFeed(ViewTestCase):
                                      slug='spam')
 
         mommy.make_recipe('knowledge.tests.public_published_article',
-                          created=datetime.datetime(2013, 5, 27,),
+                          created=datetime.datetime(2013, 5, 27, tzinfo=utc),
                           created_by=mommy.make('User', username='Guido'),
                           category=category)
 
@@ -38,7 +39,7 @@ class TestCategoryFeed(ViewTestCase):
 
         self.assertContains(response, '<title>Title Public and Published</title>')
         self.assertContains(response, '<description>Content Public and Published</description>')
-        self.assertContains(response, '<pubDate>Mon, 27 May 2013 00:00:00 -0300</pubDate>')
+        self.assertContains(response, '<pubDate>Mon, 27 May 2013 00:00:00 +0000</pubDate>')
         self.assertContains(response, '<category>Spam</category>')
         self.assertContains(response, '<category>Eggs</category>')
         self.assertContains(response, '>Guido</dc:creator>')

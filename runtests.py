@@ -50,6 +50,7 @@ settings.configure(
             'PATH': os.path.join(here, 'whoosh_index'),
         },
     },
+    USE_TZ=True,
 )
 
 urlpatterns = patterns(
