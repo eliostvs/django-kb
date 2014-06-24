@@ -3,11 +3,7 @@
 
 import knowledge
 
-try:
-    from setuptools import setup
-
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 version = knowledge.__version__
 
@@ -17,16 +13,21 @@ history = open('HISTORY.rst').read()
 setup(
     name='dj-knowledge',
     version=version,
-    description="""Simple knowledge base made with django""",
+    description='Simple knowledge base made with django',
     long_description=readme + '\n\n' + history,
     author='Elio Esteves Duarte',
     author_email='elio.esteves.duarte@gmail.com',
     url='https://github.com/eliostvs/dj-knowledge',
-    packages=[
-        'knowledge',
-    ],
+    packages=find_packages(exclude=['*tests*']),
     include_package_data=True,
     install_requires=[
+        "Django>=1.6, <1.7",
+        "South>=0.8.4",
+        "django-braces>=1.4.0",
+        "django-choices>=1.1.12",
+        "django-haystack>=2.1.0",
+        "django-model-utils>=2.0.3",
+        "django-taggit>=0.12",
     ],
     license="BSD",
     zip_safe=False,

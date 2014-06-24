@@ -16,7 +16,7 @@ Simple knowledge base made with django
 Documentation
 -------------
 
-The full documentation is at https://dj-knowledge.readthedocs.org.
+* TODO
 
 Quickstart
 ----------
@@ -24,10 +24,6 @@ Quickstart
 Install dj-knowledge::
 
     pip install dj-knowledge
-
-Then use it in a project::
-
-    import dj-knowledge
 
 Features
 --------
