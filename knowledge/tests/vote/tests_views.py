@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 
-from model_mommy import mommy
 from hashlib import md5
 
-from knowledge.base.test import ViewTestCase
+import six
+
 from knowledge.base.choices import VoteChoice
+from knowledge.base.test import ViewTestCase
+from model_mommy import mommy
 
 
 class VoteViewTestCase(ViewTestCase):
@@ -56,7 +58,7 @@ class VoteViewTestCase(ViewTestCase):
         mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
         response = self.get(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        self.assertEqual(response.content, '{"success": true}')
+        self.assertEqual(response.content, six.b('{"success": true}'))
 
     def get_view_args(self):
         return 'eggs', self.vote
