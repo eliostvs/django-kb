@@ -2,5 +2,6 @@
 omit =
     */test*
     */migrations/*
+    *admin.py
 
 source = knowledge
