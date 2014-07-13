@@ -11,7 +11,7 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read()
 
 setup(
-    name='dj-knowledge',
+    name='django-kb',
     version=version,
     description='Simple knowledge base made with django',
     long_description=readme + '\n\n' + history,
