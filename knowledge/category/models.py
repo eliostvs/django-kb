@@ -20,7 +20,8 @@ class Category(behaviours.Permalinkable,
 
     parent = models.ForeignKey('self',
                                null=True,
-                               blank=True)
+                               blank=True,
+                               related_name='subcategories')
 
     description = models.TextField(_('Description'),
                                    null=True,
@@ -36,8 +37,5 @@ class Category(behaviours.Permalinkable,
     def __str__(self):
         return self.name
 
-    def subcategories(self, public_only=False):
-        return self.category_set.all()
-
-    def articles_count(self, public_only=False):
+    def articles_count(self):
         return self.articles.published().count()

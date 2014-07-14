@@ -9,8 +9,7 @@ from .models import Category
 class CategoryFeed(Feed):
 
     def get_object(self, request, slug):
-        return get_object_or_404(Category.objects.categories(public_only=True),
-                                 slug=slug)
+        return get_object_or_404(Category.objects.categories(), slug=slug)
 
     def link(self, obj):
         return obj.get_absolute_url()

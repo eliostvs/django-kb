@@ -12,7 +12,7 @@ class CategoryManager(PassThroughManagerMixin,
     def get_queryset(self):
         return CategoryQuerySet(self.model, using=self._db)
 
-    def categories(self, public_only=False):
+    def categories(self):
         qs = self.exclude(parent__isnull=False)
         qs = qs.annotate(sum=models.Sum('articles'))
         qs = qs.filter(sum__gt=0)

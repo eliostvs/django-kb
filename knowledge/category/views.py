@@ -17,12 +17,9 @@ class CategoryDetailView(views.AddSearchFormToContextMixin,
 
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
-        context['subcategory_list'] = self.subcategory_list()
+        context['subcategory_list'] = self.object.subcategories.all()
         context['article_list'] = self.object.articles.published()
         return context
-
-    def subcategory_list(self):
-        return self.object.subcategories(self.request.user.is_anonymous())
 
 
 class CategoryCreateView(LoginRequiredMixin,
