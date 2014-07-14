@@ -24,7 +24,7 @@ class ArticleDetailView(views.AddSearchFormToContextMixin,
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['related_articles'] = self.related_articles()
+        context['related'] = self.related_articles()
         return context
 
     def related_articles(self):

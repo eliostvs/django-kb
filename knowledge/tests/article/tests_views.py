@@ -33,7 +33,7 @@ class TestArticleDetailView(ViewTestCase):
         self.assertHttpOK(response)
         self.assertObjectInContext(response, article)
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
-        self.assertSeqEqual(response.context_data['related_articles'], [published])
+        self.assertSeqEqual(response.context_data['related'], [published])
 
     def test_draft_article(self):
         mommy.make_recipe('knowledge.tests.draft_article', slug='eggs')

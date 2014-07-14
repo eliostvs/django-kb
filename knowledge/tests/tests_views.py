@@ -25,7 +25,7 @@ class HomepageTestCase(ViewTestCase):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['category_list'], [self.category])
+        self.assertSeqEqual(response.context_data['categories'], [self.category])
 
     def test_have_a_search_form_on_context(self):
         from knowledge.forms import SimpleSearchForm

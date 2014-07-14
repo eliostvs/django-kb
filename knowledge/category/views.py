@@ -17,8 +17,8 @@ class CategoryDetailView(views.AddSearchFormToContextMixin,
 
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
-        context['subcategory_list'] = self.object.get_subcategories()
-        context['article_list'] = self.object.get_articles()
+        context['subcategories'] = self.object.get_subcategories()
+        context['articles'] = self.object.get_articles()
         return context
 
 

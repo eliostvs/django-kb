@@ -26,8 +26,8 @@ class CategoryDetailViewTestCase(ViewTestCase):
 
         self.assertHttpOK(response)
         self.assertObjectInContext(response, category)
-        self.assertSeqEqual(response.context_data['subcategory_list'], [subcategory])
-        self.assertSeqEqual(response.context_data['article_list'], Article.objects.published())
+        self.assertSeqEqual(response.context_data['subcategories'], [subcategory])
+        self.assertSeqEqual(response.context_data['articles'], Article.objects.published())
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
 
 
