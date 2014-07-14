@@ -21,20 +21,14 @@ class TestCategoryFeed(ViewTestCase):
 
         return CategoryFeed()(request, slug='spam')
 
-    def test_with_private_category_should_fail(self):
-        mommy.make_recipe('knowledge.tests.private_category', slug='spam')
-
-        self.assertRaises(Http404, self.get)
-
     def test_with_category_without_articles_should_fail(self):
-        mommy.make_recipe('knowledge.tests.private_category', slug='spam')
+        mommy.make_recipe('knowledge.tests.category_without_articles', slug='spam')
         self.assertRaises(Http404, self.get)
 
     def test_view(self):
-        category = mommy.make_recipe('knowledge.tests.public_category_with_articles',
-                                     slug='spam')
+        category = mommy.make_recipe('knowledge.tests.category_with_articles', slug='spam')
 
-        mommy.make_recipe('knowledge.tests.public_published_article',
+        mommy.make_recipe('knowledge.tests.published_article',
                           created=datetime.datetime(2013, 5, 27, tzinfo=utc),
                           created_by=mommy.make('User', username='Guido'),
                           category=category)
@@ -45,16 +39,15 @@ class TestCategoryFeed(ViewTestCase):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertContains(response, '<title>Public Category Name</title>')
-        self.assertContains(response, '<description>Public Category Description</description>')
+        self.assertContains(response, '<title>Category With Articles Title</title>')
+        self.assertContains(response, '<description>Category With Articles Description</description>')
 
-        self.assertContains(response, '<title>Title Public and Published</title>')
-        self.assertContains(response, '<description>Content Public and Published</description>')
+        self.assertContains(response, '<title>Published Article Title</title>')
+        self.assertContains(response, '<description>Published Article Content</description>')
         self.assertContains(response, '<pubDate>Mon, 27 May 2013 00:00:00 +0000</pubDate>')
         self.assertContains(response, '<category>Spam</category>')
         self.assertContains(response, '<category>Eggs</category>')
         self.assertContains(response, '>Guido</dc:creator>')
 
-        self.assertNotContains(response, '<title>Title Private and Published</title>')
-        self.assertNotContains(response, '<title>Title Public and Draft</title>')
-        self.assertNotContains(response, '<title>Title Private and Draft</title>')
+        self.assertNotContains(response, '<title>Draft Article Title</title>')
+        self.assertNotContains(response, '<title>Draft Article Content</title>')

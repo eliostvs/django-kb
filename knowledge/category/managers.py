@@ -14,11 +14,6 @@ class CategoryManager(PassThroughManagerMixin,
 
     def categories(self, public_only=False):
         qs = self.exclude(parent__isnull=False)
-
-        if public_only:
-            qs = qs.public()
-
         qs = qs.annotate(sum=models.Sum('articles'))
         qs = qs.filter(sum__gt=0)
-
         return qs

@@ -7,7 +7,6 @@ from haystack.views import SearchView
 from .article.views import (ArticleCreateView, ArticleDeleteView,
                             ArticleDetailView, ArticleListView,
                             ArticleUpdateView)
-from .base.choices import VisibilityChoice
 from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
@@ -59,13 +58,6 @@ class Homepage(AddSearchFormToContextMixin,
 
 
 class KnowledgeSearchView(SearchView):
-
-    def get_results(self):
-        sqs = super(KnowledgeSearchView, self).get_results()
-
-        if self.request.user.is_anonymous():
-            sqs = sqs.filter(visibility=VisibilityChoice.Public)
-
-        return sqs
+    pass
 
 search_view = KnowledgeSearchView(form_class=SimpleSearchForm)

@@ -12,7 +12,6 @@ from .managers import CategoryManager
 
 @python_2_unicode_compatible
 class Category(behaviours.Permalinkable,
-               behaviours.Visible,
                behaviours.Authorable,
                TimeStampedModel):
 
@@ -38,17 +37,7 @@ class Category(behaviours.Permalinkable,
         return self.name
 
     def subcategories(self, public_only=False):
-        qs = self.category_set.all()
-
-        if public_only:
-            qs = qs.public()
-
-        return qs
+        return self.category_set.all()
 
     def articles_count(self, public_only=False):
-        qs = self.articles.published()
-
-        if public_only:
-            qs = qs.public()
-
-        return qs.count()
+        return self.articles.published().count()

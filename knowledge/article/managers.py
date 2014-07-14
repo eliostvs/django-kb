@@ -4,7 +4,6 @@ from django.db import models
 
 from model_utils.managers import PassThroughManagerMixin
 
-from ..base.choices import VisibilityChoice
 from .querysets import ArticleQuerySet
 
 
@@ -27,10 +26,4 @@ class ArticleManager(PassThroughManagerMixin,
         return qs.order_by('-sum')[:5]
 
     def articles(self, public_only=False):
-        qs = self.published()
-
-        if public_only:
-            qs = qs.filter(category__visibility=VisibilityChoice.Public,
-                           visibility=VisibilityChoice.Public)
-
-        return qs
+        return self.published()

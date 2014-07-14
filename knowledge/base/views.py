@@ -14,18 +14,6 @@ class AddTagsToContextMixin(object):
         return context
 
 
-class LoginRequiredForPrivateObjectMixin(object):
-
-    def get_object(self, queryset=None):
-        obj = super(LoginRequiredForPrivateObjectMixin, self).get_object(queryset)
-
-        if all([obj.visibility == choices.VisibilityChoice.Private,
-                self.request.user.is_anonymous()]):
-            raise Http404
-
-        return obj
-
-
 class PublishedRequiredMixin(object):
 
     def get_object(self, queryset=None):

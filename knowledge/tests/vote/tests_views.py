@@ -26,7 +26,7 @@ class VoteViewTestCase(ViewTestCase):
         return super(VoteViewTestCase, self).view(request)
 
     def test_view_upvote(self):
-        article = mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
+        article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         response = self.get()
 
         self.assertRedirectTo(response, '/article/eggs/')
@@ -35,7 +35,7 @@ class VoteViewTestCase(ViewTestCase):
         self.assertEqual(article.votes.downvotes(), 0)
 
     def test_view_downvote(self):
-        article = mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
+        article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         self.vote = VoteChoice.Downvote
         response = self.get()
 
@@ -50,12 +50,12 @@ class VoteViewTestCase(ViewTestCase):
     def test_view_should_raise_404(self):
         from django.http import Http404
 
-        mommy.make_recipe('knowledge.tests.public_draft_article', slug='eggs')
+        mommy.make_recipe('knowledge.tests.draft_article', slug='eggs')
 
         self.assertRaises(Http404, self.get)
 
     def test_ajax_request(self):
-        mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
+        mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         response = self.get(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(response.content, six.b('{"success": true}'))

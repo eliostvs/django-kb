@@ -12,7 +12,6 @@ from .models import Article
 
 class ArticleDetailView(views.AddSearchFormToContextMixin,
                         views.AddTagsToContextMixin,
-                        views.LoginRequiredForPrivateObjectMixin,
                         views.PublishedRequiredMixin,
                         generic.DetailView):
 

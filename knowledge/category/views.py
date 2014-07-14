@@ -11,7 +11,6 @@ from .models import Category
 
 
 class CategoryDetailView(views.AddSearchFormToContextMixin,
-                         views.LoginRequiredForPrivateObjectMixin,
                          generic.DetailView):
 
     model = Category
@@ -19,19 +18,11 @@ class CategoryDetailView(views.AddSearchFormToContextMixin,
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
         context['subcategory_list'] = self.subcategory_list()
-        context['article_list'] = self.article_list()
+        context['article_list'] = self.object.articles.published()
         return context
 
     def subcategory_list(self):
         return self.object.subcategories(self.request.user.is_anonymous())
-
-    def article_list(self):
-        qs = self.object.articles.published()
-
-        if self.request.user.is_anonymous():
-            qs = qs.public()
-
-        return qs
 
 
 class CategoryCreateView(LoginRequiredMixin,

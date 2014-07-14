@@ -44,7 +44,7 @@ class Article(behaviours.Permalinkable,
         return self.title
 
     def related(self, public_only=False):
-        qs = Article.objects.articles(public_only)
+        qs = Article.objects.published()
         qs = qs.filter(tags__in=self.tags.all())
         qs = qs.exclude(pk=self.pk)
 

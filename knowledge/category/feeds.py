@@ -22,7 +22,7 @@ class CategoryFeed(Feed):
         return obj.description
 
     def items(self, obj):
-        return obj.articles.published().public()
+        return obj.articles.published()
 
     def item_description(self, item):
         return item.content
