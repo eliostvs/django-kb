@@ -34,26 +34,23 @@ class HomepageTestCase(ViewTestCase):
 
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
 
-    def test_count_published_articles(self):
-        response = self.get()
-        category_list = response.context_data['category_list']
-
-        self.assertHttpOK(response)
-        self.assertEqual(category_list[0].get_articles_count(), 1)
-
-    def test_list_latest_published_articles(self):
+    def test_list_latest_articles(self):
+        articles = mommy.make_recipe('knowledge.tests.published_article',
+                                     category=self.category,
+                                     _quantity=5)
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['new_articles'], Article.objects.published())
+        self.assertEqual(Article.objects.count(), 7)
+        self.assertSeqEqual(response.context_data['new_articles'], articles)
 
-    def test_list_top_viewed_published_articles(self):
+    def test_list_top_viewed_articles(self):
         response = self.get()
 
         self.assertHttpOK(response)
         self.assertSeqEqual(response.context_data['new_articles'], Article.objects.published())
 
-    def test_list_top_rated_published_articles(self):
+    def test_list_top_rated_articles(self):
         response = self.get()
 
         self.assertHttpOK(response)
