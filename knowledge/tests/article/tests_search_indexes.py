@@ -22,23 +22,30 @@ class SearchArticleTestCase(SearchViewTestCase):
 
         call_command('rebuild_index', interactive=False, verbosity=0)
 
-    def test_search_title_should_list_only_public_articles_in_public_categories(self):
+    def test_search_title(self):
         response = self.get({'q': 'published article title'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
         self.assertSeqEqual([a.object for a in object_list], Article.objects.published())
 
-    def test_search_content_should_list_only_public_articles_in_public_categories(self):
+    def test_search_content(self):
         response = self.get({'q': 'published article content'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
         self.assertSeqEqual([a.object for a in object_list], Article.objects.published())
 
-    def test_search_tag_should_list_only_public_articles_in_public_categories(self):
+    def test_search_tag_should(self):
         response = self.get({'q': 'bar'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
         self.assertSeqEqual([a.object for a in object_list], Article.objects.published())
+
+    def test_search_draf_article(self):
+        response = self.get({'q': 'draft article title'})
+        object_list = response.context['page'].object_list
+
+        self.assertHttpOK(response)
+        self.assertFalse([a.object for a in object_list])
