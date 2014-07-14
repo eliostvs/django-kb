@@ -16,15 +16,16 @@ class HomepageTestCase(ViewTestCase):
 
     def setUp(self):
         self.category = mommy.make_recipe('knowledge.tests.category_with_articles')
+        mommy.make_recipe('knowledge.tests.category_without_articles')
 
         for article in Article.objects.published():
             article.votes.add(token=article.id, rate=choices.VoteChoice.Upvote)
 
-    def test_list_categories(self):
+    def test_category_list(self):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['categories'], [self.category])
+        self.assertSeqEqual(response.context_data['category_list'], [self.category])
 
     def test_have_a_search_form_on_context(self):
         from knowledge.forms import SimpleSearchForm
@@ -35,7 +36,7 @@ class HomepageTestCase(ViewTestCase):
 
     def test_count_published_articles(self):
         response = self.get()
-        category_list = response.context_data['categories']
+        category_list = response.context_data['category_list']
 
         self.assertHttpOK(response)
         self.assertEqual(category_list[0].get_articles_count(), 1)
