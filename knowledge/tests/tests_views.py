@@ -4,7 +4,7 @@ from model_mommy import mommy
 
 from knowledge.base import choices
 from knowledge.base.test import LoggedUser, ViewTestCase
-from knowledge.models import Article, Category
+from knowledge.models import Article
 
 
 class HomepageBaseTestCase(ViewTestCase):
@@ -15,8 +15,8 @@ class HomepageBaseTestCase(ViewTestCase):
     view_name = 'knowledge:homepage'
 
     def setUp(self):
-        mommy.make_recipe('knowledge.tests.public_category_with_articles')
-        mommy.make_recipe('knowledge.tests.private_category_with_articles')
+        self.public = mommy.make_recipe('knowledge.tests.public_category_with_articles')
+        self.private = mommy.make_recipe('knowledge.tests.private_category_with_articles')
 
         for article in Article.objects.published():
             article.votes.add(token=article.id, rate=choices.VoteChoice.Upvote)
@@ -28,7 +28,7 @@ class TestHomepageAsAnonymousUser(HomepageBaseTestCase):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['categories'], Category.objects.public())
+        self.assertSeqEqual(response.context_data['categories'], [self.public])
 
     def test_should_count_published_public_articles_in_public_categories(self):
         response = self.get()
@@ -70,7 +70,7 @@ class TestHomepageAsAuthenticatedUser(HomepageBaseTestCase):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['categories'], Category.objects.all())
+        self.assertSeqEqual(response.context_data['categories'], [self.public, self.private])
 
     def test_should_count_all_published_articles(self):
         response = self.get()

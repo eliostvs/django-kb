@@ -39,19 +39,14 @@ class Homepage(AddSearchFormToContextMixin,
 
     def get_context_data(self, **kwargs):
         context = super(Homepage, self).get_context_data(**kwargs)
-        context['categories'] = self.categories()
+        context['categories'] = self.get_categories()
         context['new_articles'] = self.get_new_articles()
         context['top_viewed_articles'] = self.get_top_viewed_articles()
         context['top_rated_articles'] = self.get_top_rated_articles()
         return context
 
-    def categories(self):
-        qs = Category.objects.all()
-
-        if self.request.user.is_anonymous():
-            qs = qs.public()
-
-        return qs
+    def get_categories(self):
+        return Category.objects.get_categories(self.request.user.is_anonymous())
 
     def get_new_articles(self):
         return Article.objects.new(self.request.user.is_anonymous())

@@ -4,11 +4,10 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
-from model_utils.managers import PassThroughManager
 from model_utils.models import TimeStampedModel
 
 from ..base import behaviours
-from .querysets import CategoryQueryset
+from .managers import CategoryManager
 
 
 @python_2_unicode_compatible
@@ -28,7 +27,7 @@ class Category(behaviours.Permalinkable,
                                    null=True,
                                    blank=True)
 
-    objects = PassThroughManager.for_queryset_class(CategoryQueryset)()
+    objects = CategoryManager()
 
     class Meta:
         app_label = 'knowledge'
