@@ -26,7 +26,6 @@ __all__ = [
     'CategoryUpdateView',
     'CategoryDeleteView',
     'Homepage',
-    'KnowledgeSearchView',
     'search_view',
 ]
 
@@ -57,7 +56,4 @@ class Homepage(AddSearchFormToContextMixin,
         return Article.objects.top_rated(self.request.user.is_anonymous())
 
 
-class KnowledgeSearchView(SearchView):
-    pass
-
-search_view = KnowledgeSearchView(form_class=SimpleSearchForm)
+search_view = SearchView(form_class=SimpleSearchForm)
