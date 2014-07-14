@@ -27,21 +27,21 @@ class SearchArticleAsAnonymousUserTestCase(SearchArticleBaseTestCase):
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertSeqEqual([a.object for a in object_list], Article.objects.get_articles(public_only=True))
+        self.assertSeqEqual([a.object for a in object_list], Article.objects.articles(public_only=True))
 
     def test_search_content_should_list_only_public_articles_in_public_categories(self):
         response = self.get({'q': 'content'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertSeqEqual([a.object for a in object_list], Article.objects.get_articles(public_only=True))
+        self.assertSeqEqual([a.object for a in object_list], Article.objects.articles(public_only=True))
 
     def test_search_tag_should_list_only_public_articles_in_public_categories(self):
         response = self.get({'q': 'bar'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertSeqEqual([a.object for a in object_list], Article.objects.get_articles(public_only=True))
+        self.assertSeqEqual([a.object for a in object_list], Article.objects.articles(public_only=True))
 
 
 class SearchArticleAsAuthenticatedUserTestCase(SearchArticleBaseTestCase):

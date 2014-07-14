@@ -15,18 +15,18 @@ class ArticleManager(PassThroughManagerMixin,
         return ArticleQuerySet(self.model, using=self._db)
 
     def top_viewed(self, public_only=False):
-        return self.get_articles(public_only).order_by('-hits')[:5]
+        return self.articles(public_only).order_by('-hits')[:5]
 
     def new(self, public_only=False):
-        return self.get_articles(public_only).order_by('-created')[:5]
+        return self.articles(public_only).order_by('-created')[:5]
 
     def top_rated(self, public_only=False):
-        qs = self.get_articles(public_only)
+        qs = self.articles(public_only)
         qs = qs.annotate(sum=models.Sum('ratings__rate'))
         qs = qs.filter(sum__gt=0)
         return qs.order_by('-sum')[:5]
 
-    def get_articles(self, public_only=False):
+    def articles(self, public_only=False):
         qs = self.published()
 
         if public_only:

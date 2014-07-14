@@ -45,7 +45,7 @@ class Article(behaviours.Visible,
         return self.title
 
     def related(self, public_only=False):
-        qs = Article.objects.get_articles(public_only)
+        qs = Article.objects.articles(public_only)
         qs = qs.filter(tags__in=self.tags.all())
         qs = qs.exclude(pk=self.pk)
 
