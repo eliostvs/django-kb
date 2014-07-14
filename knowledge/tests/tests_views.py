@@ -34,7 +34,7 @@ class HomepageTestCase(ViewTestCase):
 
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
 
-    def test_list_latest_articles(self):
+    def test_latest_articles(self):
         articles = mommy.make_recipe('knowledge.tests.published_article',
                                      category=self.category,
                                      _quantity=5)
@@ -42,16 +42,25 @@ class HomepageTestCase(ViewTestCase):
 
         self.assertHttpOK(response)
         self.assertEqual(Article.objects.count(), 7)
-        self.assertSeqEqual(response.context_data['new_articles'], articles)
+        self.assertSeqEqual(response.context_data['top_new'], articles)
 
-    def test_list_top_viewed_articles(self):
+    def test_top_viewed_articles(self):
+        articles = mommy.make_recipe('knowledge.tests.published_article',
+                                     category=self.category,
+                                     _quantity=5)
+
+        for n, a in enumerate(articles):
+            a.hits = n + 1
+            a.save()
+
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['new_articles'], Article.objects.published())
+        self.assertEqual(Article.objects.count(), 7)
+        self.assertListEqual(list(response.context_data['top_viewed']), list(reversed(articles)))
 
-    def test_list_top_rated_articles(self):
+    def test_top_rated_articles(self):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['top_viewed_articles'], Article.objects.published())
+        self.assertSeqEqual(response.context_data['top_rated'], Article.objects.published())

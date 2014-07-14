@@ -38,9 +38,9 @@ class Homepage(AddSearchFormToContextMixin,
     def get_context_data(self, **kwargs):
         context = super(Homepage, self).get_context_data(**kwargs)
         context['category_list'] = Category.objects.get_categories()
-        context['new_articles'] = Article.objects.new()
-        context['top_viewed_articles'] = Article.objects.top_viewed()
-        context['top_rated_articles'] = Article.objects.top_rated()
+        context['top_new'] = Article.objects.new()
+        context['top_viewed'] = Article.objects.top_viewed()
+        context['top_rated'] = Article.objects.top_rated()
         return context
 
 search_view = SearchView(form_class=SimpleSearchForm)
