@@ -15,8 +15,7 @@ from .managers import ArticleManager
 
 
 @python_2_unicode_compatible
-class Article(behaviours.Visible,
-              behaviours.Permalinkable,
+class Article(behaviours.Permalinkable,
               behaviours.Authorable,
               behaviours.Publishable,
               TimeStampedModel):

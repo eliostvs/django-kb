@@ -15,11 +15,6 @@ class BaseChoice(DjangoChoices):
                                   'one of the available choices.')
 
 
-class VisibilityChoice(BaseChoice):
-    Public = ChoiceItem(1, _('Public'))
-    Private = ChoiceItem(2, _('Private'))
-
-
 class PublishChoice(BaseChoice):
     Draft = ChoiceItem(1, _('Draft'))
     Published = ChoiceItem(2, _('Publish'))
