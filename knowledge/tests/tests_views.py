@@ -38,7 +38,7 @@ class HomepageTestCase(ViewTestCase):
         category_list = response.context_data['categories']
 
         self.assertHttpOK(response)
-        self.assertEqual(category_list[0].articles_count(), 1)
+        self.assertEqual(category_list[0].get_articles_count(), 1)
 
     def test_list_latest_published_articles(self):
         response = self.get()
