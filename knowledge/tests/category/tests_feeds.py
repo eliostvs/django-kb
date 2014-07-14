@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.http import Http404
+
 from django.utils.timezone import utc
 from model_mommy import mommy
 
@@ -18,6 +20,11 @@ class TestCategoryFeed(ViewTestCase):
         from knowledge.feeds import CategoryFeed
 
         return CategoryFeed()(request, slug='spam')
+
+    def test_with_private_category_should_fail(self):
+        mommy.make_recipe('knowledge.tests.private_category', slug='spam')
+
+        self.assertRaises(Http404, self.get)
 
     def test_view(self):
         category = mommy.make_recipe('knowledge.tests.public_category_with_articles',
