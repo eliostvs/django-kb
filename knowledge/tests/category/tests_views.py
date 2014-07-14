@@ -20,7 +20,7 @@ class CategoryDetailViewTestCase(ViewTestCase):
         from knowledge.forms import SimpleSearchForm
 
         category = mommy.make_recipe('knowledge.tests.category_with_articles', slug='spam')
-        subcategory = mommy.make_recipe('knowledge.tests.category_without_articles', parent=category)
+        subcategory = mommy.make_recipe('knowledge.tests.subcategory', parent=category)
 
         response = self.get()
 
