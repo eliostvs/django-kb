@@ -11,4 +11,4 @@ class CategoryIndex(BaseIndex):
         return Category
 
     def index_queryset(self, using=None):
-        return Category.objects.get_categories()
+        return Category.objects.get_categories(exclude_subcategories=False)

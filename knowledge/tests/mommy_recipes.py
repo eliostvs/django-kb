@@ -22,6 +22,9 @@ category_without_articles = Recipe(Category,
                                    name='Category Without Articles Title',
                                    description='Category Without Articles Description')
 
+subcategory = Recipe(Category,
+                     name='Subcategory Title')
+
 category_with_articles = Recipe(Category,
                                 name='Category With Articles Title',
                                 description='Category With Articles Description',
