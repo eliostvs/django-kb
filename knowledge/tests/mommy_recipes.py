@@ -44,6 +44,9 @@ private_category = Recipe(Category,
                           description='Private Category Description',
                           visibility=choices.VisibilityChoice.Private)
 
+category_without_articles = Recipe(Category,
+                                   name='Category Without Articles')
+
 public_category_with_articles = Recipe(Category,
                                        name='Public Category Name',
                                        description='Public Category Description',

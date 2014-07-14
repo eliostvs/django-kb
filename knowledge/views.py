@@ -46,7 +46,7 @@ class Homepage(AddSearchFormToContextMixin,
         return context
 
     def get_categories(self):
-        return Category.objects.get_categories(self.request.user.is_anonymous())
+        return Category.objects.categories(self.request.user.is_anonymous())
 
     def get_new_articles(self):
         return Article.objects.new(self.request.user.is_anonymous())
