@@ -9,3 +9,6 @@ class CategoryIndex(BaseIndex):
 
     def get_model(self):
         return Category
+
+    def index_queryset(self, using=None):
+        return Category.objects.get_categories()
