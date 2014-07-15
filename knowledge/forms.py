@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from django import forms
+
 from haystack.forms import SearchForm
 
 from .article.forms import ArticleForm
@@ -14,4 +16,6 @@ __all__ = [
 
 
 class SimpleSearchForm(SearchForm):
-    pass
+    q = forms.CharField(widget=forms.TextInput(attrs={'id': 'search-input'}),
+                        required=False,
+                        label='')
