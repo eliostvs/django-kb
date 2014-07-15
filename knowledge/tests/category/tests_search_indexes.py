@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 
+from django.core.management import call_command
+
 from model_mommy import mommy
 
-from knowledge.base.test import LoggedUser, SearchViewTestCase
+from knowledge.base.test import SearchViewTestCase
 from knowledge.views import search_view
 
 
@@ -11,42 +13,38 @@ class SearchCategoryBaseTestCase(SearchViewTestCase):
     view_function = search_view
     view_name = 'search'
 
-    def make_instance(self):
-        self.public = mommy.make_recipe('knowledge.tests.public_category')
-        self.private = mommy.make_recipe('knowledge.tests.private_category')
+    def setUp(self):
+        self.category = mommy.make_recipe('knowledge.tests.category_with_articles')
+        mommy.make_recipe('knowledge.tests.category_without_articles')
+        self.subcategory = mommy.make_recipe('knowledge.tests.subcategory', parent=self.category)
+        mommy.make_recipe('knowledge.tests.published_article', category=self.subcategory)
 
+        call_command('rebuild_index', interactive=False, verbosity=0)
 
-class SearchCategoryTestCaseAsAnonymousUser(SearchCategoryBaseTestCase):
-
-    def test_search_title_should_list_only_public_categories(self):
-        response = self.get({'q': 'public'})
+    def test_search_title(self):
+        response = self.get({'q': 'category with articles title'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertEqual([o.object for o in object_list], [self.public])
+        self.assertEqual([o.object for o in object_list], [self.category])
 
-    def test_search_description_should_list_only_public_categories(self):
-        response = self.get({'q': 'description'})
+    def test_search_description(self):
+        response = self.get({'q': 'category with articles description'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertEqual([o.object for o in object_list], [self.public])
+        self.assertEqual([o.object for o in object_list], [self.category])
 
-
-class SearchCategoryTestCaseAsAuthenticatedUser(SearchCategoryBaseTestCase):
-
-    view_user = LoggedUser
-
-    def test_search_title_should_list_public_and_private_categories(self):
-        response = self.get({'q': 'name'})
+    def test_search_category_without_articles(self):
+        response = self.get({'q': 'category without articles title'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertEqual([o.object for o in object_list], [self.public, self.private])
+        self.assertFalse([o.object for o in object_list])
 
-    def test_search_description_should_list_public_and_private_categories(self):
-        response = self.get({'q': 'description'})
+    def test_search_subcategory(self):
+        response = self.get({'q': 'subcategory title'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
-        self.assertEqual([o.object for o in object_list], [self.public, self.private])
+        self.assertEqual([o.object for o in object_list], [self.subcategory])

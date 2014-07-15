@@ -7,4 +7,3 @@ class BaseIndex(indexes.Indexable,
                 indexes.SearchIndex):
 
     text = indexes.CharField(document=True, use_template=True)
-    visibility = indexes.IntegerField(model_attr='visibility')

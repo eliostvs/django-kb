@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from django.http import Http404
-from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 
 from model_mommy import mommy
@@ -17,35 +15,20 @@ class CategoryDetailViewTestCase(ViewTestCase):
     view_class = CategoryDetailView
     view_name = 'knowledge:category_detail'
     view_kwargs = {'slug': 'spam'}
-    view_user = LoggedUser
 
     def test_view(self):
         from knowledge.forms import SimpleSearchForm
 
-        category = mommy.make_recipe('knowledge.tests.public_category_with_articles', slug='spam')
-        public = mommy.make_recipe('knowledge.tests.public_category', parent=category)
-        private = mommy.make_recipe('knowledge.tests.private_category', parent=category)
+        category = mommy.make_recipe('knowledge.tests.category_with_articles', slug='spam')
+        subcategory = mommy.make_recipe('knowledge.tests.subcategory', parent=category)
 
         response = self.get()
 
         self.assertHttpOK(response)
         self.assertObjectInContext(response, category)
-        self.assertSeqEqual(response.context_data['subcategory_list'], [private, public])
-        self.assertSeqEqual(response.context_data['article_list'], Article.objects.published())
+        self.assertSeqEqual(response.context_data['subcategories'], [subcategory])
+        self.assertSeqEqual(response.context_data['articles'], Article.objects.published())
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
-
-        response = self.get(user=AnonymousUser())
-
-        self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['subcategory_list'], [public])
-        self.assertSeqEqual(response.context_data['article_list'], Article.objects.published().public())
-        self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
-
-    def test_private_category(self):
-        mommy.make_recipe('knowledge.tests.private_category', slug='spam')
-
-        self.assertHttpOK(self.get())
-        self.assertRaises(Http404, self.get, user=AnonymousUser())
 
 
 class CategoryCreateViewTestCase(ViewTestCase):
@@ -66,7 +49,6 @@ class CategoryCreateViewTestCase(ViewTestCase):
         self.form_data = {
             'name': category.name,
             'slug': category.slug,
-            'visibility': category.visibility,
         }
 
     def test_view(self):
@@ -118,13 +100,12 @@ class CategoryUpdateViewTestCase(ViewTestCase):
     view_kwargs = {'slug': 'spam'}
 
     def setUp(self):
-        self.category = mommy.make_recipe('knowledge.tests.public_category',
+        self.category = mommy.make_recipe('knowledge.tests.category_without_articles',
                                           slug='spam')
 
         self.form_data = {
-            'name': self.category.name,
+            'name': 'Eggs',
             'slug': self.category.slug,
-            'visibility': self.category.visibility,
         }
 
     def test_view(self):
@@ -141,7 +122,7 @@ class CategoryUpdateViewTestCase(ViewTestCase):
                               reverse('knowledge:category_list'))
 
         category = self.refresh(self.category)
-        self.assertEqual(category.name, 'Public Category Name')
+        self.assertEqual(category.name, 'Eggs')
 
 
 class CategoryDeleteViewTestCase(ViewTestCase):

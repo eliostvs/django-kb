@@ -223,21 +223,6 @@ class BehaviorTestCaseMixin(object):
         raise NotImplementedError("Implement me")
 
 
-class VisibilityTestMixin(BehaviorTestCaseMixin):
-
-    def test_visibility(self):
-        from knowledge.base.choices import VisibilityChoice
-
-        obj = self.create_instance()
-        self.assertEqual(obj.visibility, VisibilityChoice.Public)
-
-        self.create_instance(visibility=VisibilityChoice.Private)
-
-        self.assertEqual(self.get_model()._default_manager.count(), 2)
-        self.assertEqual(self.get_model()._default_manager.public().count(), 1)
-        self.assertEqual(self.get_model()._default_manager.private().count(), 1)
-
-
 class PermalinkTestMixin(BehaviorTestCaseMixin):
 
     def test_permalink(self):

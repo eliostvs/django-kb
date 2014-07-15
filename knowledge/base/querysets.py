@@ -2,16 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from .choices import PublishChoice, VisibilityChoice
-
-
-class VisibleQueryset(models.query.QuerySet):
-
-    def public(self):
-        return self.filter(visibility=VisibilityChoice.Public)
-
-    def private(self):
-        return self.filter(visibility=VisibilityChoice.Private)
+from .choices import PublishChoice
 
 
 class AuthorableQueryset(models.query.QuerySet):

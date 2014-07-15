@@ -11,12 +11,11 @@ class ArticleFormTestCase(TestCase):
         form = ArticleForm({})
 
         self.assertFalse(form.is_valid())
-        self.assertEqual(len(form.errors), 6)
+        self.assertEqual(len(form.errors), 5)
         self.assertEqual(form.errors['title'], ['This field is required.'])
         self.assertEqual(form.errors['content'], ['This field is required.'])
         self.assertEqual(form.errors['slug'], ['This field is required.'])
         self.assertEqual(form.errors['category'], ['This field is required.'])
-        self.assertEqual(form.errors['visibility'], ['This field is required.'])
         self.assertEqual(form.errors['publish_state'], ['This field is required.'])
 
     def test_form_initial_value(self):
@@ -25,6 +24,5 @@ class ArticleFormTestCase(TestCase):
 
         form = ArticleForm()
 
-        self.assertEqual(form.fields['visibility'].initial, choices.VisibilityChoice.Public)
         self.assertEqual(form.fields['publish_state'].initial, choices.PublishChoice.Draft)
         self.assertEqual(form.fields['slug'].initial, get_random_string)

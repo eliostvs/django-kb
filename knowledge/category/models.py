@@ -12,7 +12,6 @@ from .managers import CategoryManager
 
 @python_2_unicode_compatible
 class Category(behaviours.Permalinkable,
-               behaviours.Visible,
                behaviours.Authorable,
                TimeStampedModel):
 
@@ -21,7 +20,8 @@ class Category(behaviours.Permalinkable,
 
     parent = models.ForeignKey('self',
                                null=True,
-                               blank=True)
+                               blank=True,
+                               related_name='subcategories')
 
     description = models.TextField(_('Description'),
                                    null=True,
@@ -37,18 +37,11 @@ class Category(behaviours.Permalinkable,
     def __str__(self):
         return self.name
 
-    def subcategories(self, public_only=False):
-        qs = self.category_set.all()
+    def get_articles(self):
+        return self.articles.published()
 
-        if public_only:
-            qs = qs.public()
+    def get_articles_count(self):
+        return self.get_articles().count()
 
-        return qs
-
-    def articles_count(self, public_only=False):
-        qs = self.articles.published()
-
-        if public_only:
-            qs = qs.public()
-
-        return qs.count()
+    def get_subcategories(self):
+        return self.subcategories.all()

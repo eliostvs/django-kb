@@ -2,12 +2,11 @@ from __future__ import unicode_literals
 
 from model_mommy import mommy
 
-from knowledge.base import choices
-from knowledge.base.test import LoggedUser, ViewTestCase
+from knowledge.base.test import ViewTestCase
 from knowledge.models import Article
 
 
-class HomepageBaseTestCase(ViewTestCase):
+class HomepageTestCase(ViewTestCase):
 
     from knowledge.views import Homepage
 
@@ -15,85 +14,62 @@ class HomepageBaseTestCase(ViewTestCase):
     view_name = 'knowledge:homepage'
 
     def setUp(self):
-        self.public = mommy.make_recipe('knowledge.tests.public_category_with_articles')
-        self.private = mommy.make_recipe('knowledge.tests.private_category_with_articles')
+        self.category = mommy.make_recipe('knowledge.tests.category_with_articles')
+        mommy.make_recipe('knowledge.tests.category_without_articles')
 
-        for article in Article.objects.published():
-            article.votes.add(token=article.id, rate=choices.VoteChoice.Upvote)
-
-
-class TestHomepageAsAnonymousUser(HomepageBaseTestCase):
-
-    def test_should_list_public_categories(self):
+    def test_category_list(self):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['categories'], [self.public])
+        self.assertSeqEqual(response.context_data['categories'], [self.category])
 
-    def test_should_count_published_public_articles_in_public_categories(self):
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertEqual(response.context_data['categories'][0].articles_count(True), 1)
-
-    def test_should_list_latest_published_public_articles_in_public_categories(self):
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertEqual(response.context_data['new_articles'].count(), 1)
-
-    def test_should_list_top_viewed_published_public_articles_in_public_categories(self):
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertEqual(response.context_data['top_viewed_articles'].count(), 1)
-
-    def test_should_list_top_rated_published_public_articles_in_public_categories(self):
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertEqual(response.context_data['top_rated_articles'].count(), 1)
-
-    def test_should_have_a_search_form_on_context(self):
+    def test_have_a_search_form_on_context(self):
         from knowledge.forms import SimpleSearchForm
 
         response = self.get()
 
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
 
-
-class TestHomepageAsAuthenticatedUser(HomepageBaseTestCase):
-
-    view_user = LoggedUser
-
-    def test_should_list_all_categories(self):
+    def test_latest_articles(self):
+        articles = mommy.make_recipe('knowledge.tests.published_article', _quantity=5)
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['categories'], [self.public, self.private])
+        self.assertEqual(Article.objects.count(), 7)
+        self.assertSeqEqual(response.context_data['top_new'], articles)
 
-    def test_should_count_all_published_articles(self):
-        response = self.get()
-        category_list = response.context_data['categories']
+    def test_top_viewed_articles(self):
+        articles = mommy.make_recipe('knowledge.tests.published_article', _quantity=5)
 
-        self.assertHttpOK(response)
-        self.assertEqual(category_list[0].articles_count(), 2)
-        self.assertEqual(category_list[1].articles_count(), 2)
+        for n, a in enumerate(articles):
+            a.hits = n + 1
+            a.save()
 
-    def test_should_list_latest_published_articles(self):
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['new_articles'], Article.objects.published())
-
-    def test_should_list_top_viewed_published_articles(self):
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['new_articles'], Article.objects.published())
+        self.assertEqual(Article.objects.count(), 7)
+        self.assertListEqual(list(response.context_data['top_viewed']), list(reversed(articles)))
 
-    def test_should_list_top_rated_published_articles(self):
+    def test_top_rated_articles(self):
+        from knowledge.base.choices import VoteChoice
+
+        d = mommy.make_recipe('knowledge.tests.published_article', title='d')
+        d.votes.add('d1', VoteChoice.Downvote)
+
+        b = mommy.make_recipe('knowledge.tests.published_article', title='b')
+        b.votes.add('b1', VoteChoice.Upvote)
+        b.votes.add('b2', VoteChoice.Upvote)
+
+        c = mommy.make_recipe('knowledge.tests.published_article', title='c')
+        c.votes.add('c1', VoteChoice.Upvote)
+
+        a = mommy.make_recipe('knowledge.tests.published_article', title='a')
+        a.votes.add('a1', VoteChoice.Upvote)
+        a.votes.add('a2', VoteChoice.Upvote)
+        a.votes.add('a3', VoteChoice.Upvote)
+
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertEqual(response.context_data['top_viewed_articles'].count(), 4)
+        self.assertListEqual(list(response.context_data['top_rated']), [a, b, c])

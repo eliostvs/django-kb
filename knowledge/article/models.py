@@ -15,8 +15,7 @@ from .managers import ArticleManager
 
 
 @python_2_unicode_compatible
-class Article(behaviours.Visible,
-              behaviours.Permalinkable,
+class Article(behaviours.Permalinkable,
               behaviours.Authorable,
               behaviours.Publishable,
               TimeStampedModel):
@@ -45,7 +44,7 @@ class Article(behaviours.Visible,
         return self.title
 
     def related(self, public_only=False):
-        qs = Article.objects.articles(public_only)
+        qs = Article.objects.published()
         qs = qs.filter(tags__in=self.tags.all())
         qs = qs.exclude(pk=self.pk)
 

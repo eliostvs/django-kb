@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from .choices import VisibilityChoice, PublishChoice
+from .choices import PublishChoice
 
 
 class Permalinkable(models.Model):
@@ -19,16 +19,6 @@ class Permalinkable(models.Model):
         return reverse('%s:%s_detail' % (self._meta.app_label,
                                          self._meta.model_name),
                        args=(self.slug,))
-
-
-class Visible(models.Model):
-    visibility = models.IntegerField(_('Visibility'),
-                                     choices=VisibilityChoice.choices,
-                                     default=VisibilityChoice.Public,
-                                     validators=[VisibilityChoice.validator])
-
-    class Meta:
-        abstract = True
 
 
 class Authorable(models.Model):

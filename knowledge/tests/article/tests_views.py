@@ -17,16 +17,13 @@ class TestArticleDetailView(ViewTestCase):
     view_class = ArticleDetailView
     view_name = 'knowledge:article_detail'
     view_kwargs = {'slug': 'eggs'}
-    view_user = LoggedUser
 
     def test_view(self):
         from knowledge.forms import SimpleSearchForm
 
-        article = mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
-        mommy.make_recipe('knowledge.tests.public_draft_article')
-        mommy.make_recipe('knowledge.tests.private_draft_article')
-        private = mommy.make_recipe('knowledge.tests.private_published_article')
-        public = mommy.make_recipe('knowledge.tests.public_published_article')
+        article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
+        published = mommy.make_recipe('knowledge.tests.published_article')
+        mommy.make_recipe('knowledge.tests.draft_article')
 
         for each in Article.objects.all():
             each.tags.add('Spam')
@@ -36,28 +33,16 @@ class TestArticleDetailView(ViewTestCase):
         self.assertHttpOK(response)
         self.assertObjectInContext(response, article)
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
-        self.assertSeqEqual(response.context_data['related_articles'], [public, private])
-
-        response = self.get(user=AnonymousUser())
-
-        self.assertHttpOK(response)
-        self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
-        self.assertSeqEqual(response.context_data['related_articles'], [public])
-
-    def test_private_article(self):
-        mommy.make_recipe('knowledge.tests.private_published_article', slug='eggs')
-
-        self.assertHttpOK(self.get())
-        self.assertRaises(Http404, self.get, user=AnonymousUser())
+        self.assertSeqEqual(response.context_data['related'], [published])
 
     def test_draft_article(self):
-        mommy.make_recipe('knowledge.tests.public_draft_article', slug='eggs')
+        mommy.make_recipe('knowledge.tests.draft_article', slug='eggs')
 
         self.assertRaises(Http404, self.get, user=LoggedUser())
         self.assertRaises(Http404, self.get, user=AnonymousUser())
 
     def test_should_list_article_tags(self):
-        article = mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
+        article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         article.tags.add('Spam')
         response = self.get()
 
@@ -65,7 +50,7 @@ class TestArticleDetailView(ViewTestCase):
         self.assertEqual(response.context_data['tags'][0].name, 'Spam')
 
     def test_view_counter(self):
-        article = mommy.make_recipe('knowledge.tests.public_published_article', slug='eggs')
+        article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         self.assertEqual(article.hits, 0)
 
         response = self.get()
@@ -87,7 +72,7 @@ class ArticleCreateViewTestCase(ViewTestCase):
 
     def setUp(self):
         category = mommy.make('Category')
-        article = mommy.prepare_recipe('knowledge.tests.private_published_article',
+        article = mommy.prepare_recipe('knowledge.tests.published_article',
                                        category=category,
                                        slug='eggs')
 
@@ -95,7 +80,6 @@ class ArticleCreateViewTestCase(ViewTestCase):
             'title': article.title,
             'content': article.content,
             'slug': article.slug,
-            'visibility': article.visibility,
             'publish_state': article.publish_state,
             'category': article.category.id,
         }
@@ -178,15 +162,14 @@ class ArticleUpdateViewTestCase(ViewTestCase):
 
     def setUp(self):
         category = mommy.make('Category')
-        self.article = mommy.make_recipe('knowledge.tests.public_published_article',
+        self.article = mommy.make_recipe('knowledge.tests.published_article',
                                          category=category,
                                          slug='spam')
 
         self.form_data = {
             'title': 'Bar',
             'slug': self.article.slug,
-            'content': self.article.content,
-            'visibility': self.article.visibility,
+            'content': 'Foo',
             'publish_state': self.article.publish_state,
             'category': category.pk,
         }
@@ -208,3 +191,4 @@ class ArticleUpdateViewTestCase(ViewTestCase):
         article = self.refresh(self.article)
 
         self.assertEqual(article.title, 'Bar')
+        self.assertEqual(article.content, 'Foo')
