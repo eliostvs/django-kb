@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from model_mommy import mommy
 
-from knowledge.base import choices
 from knowledge.base.test import ViewTestCase
 from knowledge.models import Article
 
@@ -18,9 +17,6 @@ class HomepageTestCase(ViewTestCase):
         self.category = mommy.make_recipe('knowledge.tests.category_with_articles')
         mommy.make_recipe('knowledge.tests.category_without_articles')
 
-        for article in Article.objects.published():
-            article.votes.add(token=article.id, rate=choices.VoteChoice.Upvote)
-
     def test_category_list(self):
         response = self.get()
 
@@ -35,9 +31,7 @@ class HomepageTestCase(ViewTestCase):
         self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
 
     def test_latest_articles(self):
-        articles = mommy.make_recipe('knowledge.tests.published_article',
-                                     category=self.category,
-                                     _quantity=5)
+        articles = mommy.make_recipe('knowledge.tests.published_article', _quantity=5)
         response = self.get()
 
         self.assertHttpOK(response)
@@ -45,9 +39,7 @@ class HomepageTestCase(ViewTestCase):
         self.assertSeqEqual(response.context_data['top_new'], articles)
 
     def test_top_viewed_articles(self):
-        articles = mommy.make_recipe('knowledge.tests.published_article',
-                                     category=self.category,
-                                     _quantity=5)
+        articles = mommy.make_recipe('knowledge.tests.published_article', _quantity=5)
 
         for n, a in enumerate(articles):
             a.hits = n + 1
@@ -60,7 +52,24 @@ class HomepageTestCase(ViewTestCase):
         self.assertListEqual(list(response.context_data['top_viewed']), list(reversed(articles)))
 
     def test_top_rated_articles(self):
+        from knowledge.base.choices import VoteChoice
+
+        d = mommy.make_recipe('knowledge.tests.published_article', title='d')
+        d.votes.add('d1', VoteChoice.Downvote)
+
+        b = mommy.make_recipe('knowledge.tests.published_article', title='b')
+        b.votes.add('b1', VoteChoice.Upvote)
+        b.votes.add('b2', VoteChoice.Upvote)
+
+        c = mommy.make_recipe('knowledge.tests.published_article', title='c')
+        c.votes.add('c1', VoteChoice.Upvote)
+
+        a = mommy.make_recipe('knowledge.tests.published_article', title='a')
+        a.votes.add('a1', VoteChoice.Upvote)
+        a.votes.add('a2', VoteChoice.Upvote)
+        a.votes.add('a3', VoteChoice.Upvote)
+
         response = self.get()
 
         self.assertHttpOK(response)
-        self.assertSeqEqual(response.context_data['top_rated'], Article.objects.published())
+        self.assertListEqual(list(response.context_data['top_rated']), [a, b, c])
