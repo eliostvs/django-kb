@@ -36,7 +36,7 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         s2 = mommy.make_recipe('knowledge.tests.category_with_articles',
                                parent=parent)
 
-        self.assertSeqEqual(parent.get_subcategories(), [s1, s2])
+        self.assertSeqEqual(parent.subcategories.all(), [s1, s2])
 
     def test_absolute_url(self):
         category = self.create_instance(slug='spam')
@@ -46,4 +46,4 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         category = mommy.make_recipe('knowledge.tests.category_with_articles')
 
         self.assertEqual(category.articles.count(), 2)
-        self.assertEqual(category.get_articles_count(), 1)
+        self.assertEqual(category.number_of_articles(), 1)

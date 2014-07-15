@@ -37,11 +37,5 @@ class Category(behaviours.Permalinkable,
     def __str__(self):
         return self.name
 
-    def get_articles(self):
-        return self.articles.published()
-
-    def get_articles_count(self):
-        return self.get_articles().count()
-
-    def get_subcategories(self):
-        return self.subcategories.all()
+    def number_of_articles(self):
+        return self.articles.published().count()

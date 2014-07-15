@@ -12,7 +12,7 @@ class CategoryManager(PassThroughManagerMixin,
     def get_queryset(self):
         return CategoryQuerySet(self.model, using=self._db)
 
-    def get_categories(self, exclude_subcategories=True):
+    def categories(self, exclude_subcategories=True):
         qs = self.filter()
 
         if exclude_subcategories:
