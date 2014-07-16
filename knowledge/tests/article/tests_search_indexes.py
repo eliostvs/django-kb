@@ -6,12 +6,12 @@ from model_mommy import mommy
 
 from knowledge.base.test import SearchViewTestCase
 from knowledge.models import Article
-from knowledge.views import search_view
+from knowledge.views import SearchView
 
 
 class SearchArticleTestCase(SearchViewTestCase):
 
-    view_function = search_view
+    view_function = SearchView
     view_name = 'search'
 
     def setUp(self):

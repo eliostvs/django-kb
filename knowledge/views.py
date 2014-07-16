@@ -25,22 +25,22 @@ __all__ = [
     'CategoryCreateView',
     'CategoryUpdateView',
     'CategoryDeleteView',
-    'Homepage',
-    'search_view',
+    'HomepageView',
+    'SearchView',
 ]
 
 
-class Homepage(AddSearchFormToContextMixin,
-               TemplateView):
+class HomepageView(AddSearchFormToContextMixin,
+                   TemplateView):
 
     template_name = 'knowledge/index.html'
 
     def get_context_data(self, **kwargs):
-        context = super(Homepage, self).get_context_data(**kwargs)
+        context = super(HomepageView, self).get_context_data(**kwargs)
         context['categories'] = Category.objects.categories()
         context['top_new'] = Article.objects.new()
         context['top_viewed'] = Article.objects.top_viewed()
         context['top_rated'] = Article.objects.top_rated()
         return context
 
-search_view = SearchView(form_class=api_settings.DEFAULT_SEARCH_FORM_CLASS)
+SearchView = SearchView(form_class=api_settings.DEFAULT_SEARCH_FORM_CLASS)

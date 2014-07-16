@@ -8,9 +8,9 @@ from knowledge.models import Article
 
 class HomepageTestCase(ViewTestCase):
 
-    from knowledge.views import Homepage
+    from knowledge.views import HomepageView
 
-    view_class = Homepage
+    view_class = HomepageView
     view_name = 'knowledge:homepage'
 
     def setUp(self):
