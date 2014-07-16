@@ -17,7 +17,7 @@ class CategoryDetailViewTestCase(ViewTestCase):
     view_kwargs = {'slug': 'spam'}
 
     def test_view(self):
-        from knowledge.forms import SimpleSearchForm
+        from knowledge.forms import SearchForm
 
         category = mommy.make_recipe('knowledge.tests.category_with_articles', slug='spam')
         subcategory = mommy.make_recipe('knowledge.tests.subcategory', parent=category)
@@ -28,7 +28,7 @@ class CategoryDetailViewTestCase(ViewTestCase):
         self.assertObjectInContext(response, category)
         self.assertSeqEqual(response.context_data['subcategories'], [subcategory])
         self.assertSeqEqual(response.context_data['articles'], Article.objects.published())
-        self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
+        self.assertEqual(response.context_data['search_form'], SearchForm)
 
 
 class CategoryCreateViewTestCase(ViewTestCase):

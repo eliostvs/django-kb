@@ -11,11 +11,11 @@ from .category.forms import CategoryForm
 __all__ = [
     'ArticleForm',
     'CategoryForm',
-    'SimpleSearchForm',
+    'SearchForm',
 ]
 
 
-class SimpleSearchForm(SearchForm):
+class SearchForm(SearchForm):
     q = forms.CharField(widget=forms.TextInput(attrs={'id': 'search-input'}),
                         required=False,
                         label='')

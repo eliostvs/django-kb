@@ -19,7 +19,7 @@ class TestArticleDetailView(ViewTestCase):
     view_kwargs = {'slug': 'eggs'}
 
     def test_view(self):
-        from knowledge.forms import SimpleSearchForm
+        from knowledge.forms import SearchForm
 
         article = mommy.make_recipe('knowledge.tests.published_article', slug='eggs')
         published = mommy.make_recipe('knowledge.tests.published_article')
@@ -32,7 +32,7 @@ class TestArticleDetailView(ViewTestCase):
 
         self.assertHttpOK(response)
         self.assertObjectInContext(response, article)
-        self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
+        self.assertEqual(response.context_data['search_form'], SearchForm)
         self.assertSeqEqual(response.context_data['related'], [published])
 
     def test_draft_article(self):

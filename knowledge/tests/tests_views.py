@@ -24,11 +24,11 @@ class HomepageTestCase(ViewTestCase):
         self.assertSeqEqual(response.context_data['categories'], [self.category])
 
     def test_have_a_search_form_on_context(self):
-        from knowledge.forms import SimpleSearchForm
+        from knowledge.forms import SearchForm
 
         response = self.get()
 
-        self.assertEqual(response.context_data['search_form'], SimpleSearchForm)
+        self.assertEqual(response.context_data['search_form'], SearchForm)
 
     def test_latest_articles(self):
         articles = mommy.make_recipe('knowledge.tests.published_article', _quantity=5)

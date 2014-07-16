@@ -11,7 +11,7 @@ from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
                              CategoryUpdateView)
-from .forms import SimpleSearchForm
+from .settings import api_settings
 from .models import Article, Category
 
 __all__ = [
@@ -43,4 +43,4 @@ class Homepage(AddSearchFormToContextMixin,
         context['top_rated'] = Article.objects.top_rated()
         return context
 
-search_view = SearchView(form_class=SimpleSearchForm)
+search_view = SearchView(form_class=api_settings.DEFAULT_SEARCH_FORM_CLASS)

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.http import Http404
 
 from ..base import choices
-from ..forms import SimpleSearchForm
+from ..settings import api_settings
 
 
 class AddTagsToContextMixin(object):
@@ -29,7 +29,7 @@ class AddSearchFormToContextMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(AddSearchFormToContextMixin, self).get_context_data(**kwargs)
-        context['search_form'] = SimpleSearchForm
+        context['search_form'] = api_settings.DEFAULT_SEARCH_FORM_CLASS
         return context
 
 
