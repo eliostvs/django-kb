@@ -33,7 +33,7 @@ class Article(behaviours.Permalinkable,
 
     objects = ArticleManager()
     votes = Votes()
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     class Meta:
         app_label = 'knowledge'
