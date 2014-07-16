@@ -10,7 +10,7 @@ from knowledge.views import SearchView
 
 class SearchCategoryBaseTestCase(SearchViewTestCase):
 
-    view_function = SearchView
+    view_function = SearchView()
     view_name = 'search'
 
     def setUp(self):

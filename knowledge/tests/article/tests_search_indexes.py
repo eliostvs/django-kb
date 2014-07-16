@@ -11,7 +11,7 @@ from knowledge.views import SearchView
 
 class SearchArticleTestCase(SearchViewTestCase):
 
-    view_function = SearchView
+    view_function = SearchView()
     view_name = 'search'
 
     def setUp(self):

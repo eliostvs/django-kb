@@ -43,4 +43,9 @@ class HomepageView(AddSearchFormToContextMixin,
         context['top_rated'] = Article.objects.top_rated()
         return context
 
-SearchView = SearchView(form_class=api_settings.DEFAULT_SEARCH_FORM_CLASS)
+
+class SearchView(SearchView):
+    form = api_settings.DEFAULT_SEARCH_FORM_CLASS
+
+    def extra_context(self):
+        return {'search_form': api_settings.DEFAULT_SEARCH_FORM_CLASS}

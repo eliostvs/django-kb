@@ -13,7 +13,7 @@ urlpatterns = patterns(
 
     url(r'^article/', include('knowledge.article.urls')),
 
-    url(r'^search/', views.SearchView, name='search'),
+    url(r'^search/', views.SearchView(), name='search'),
 
     url(r'^vote/', include('knowledge.vote.urls'))
 )
