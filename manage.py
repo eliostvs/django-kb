@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 here = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(here, 'knowledge'))
+sys.path.append(os.path.join(here, 'kb'))
 
 settings.configure(
     SECRET_KEY='placerandomsecretkeyhere',
@@ -26,8 +26,8 @@ settings.configure(
         'django.contrib.staticfiles',
         'taggit',
         'haystack',
-        'knowledge',
-        'knowledge.tests',
+        'kb',
+        'kb.tests',
     ),
     MIDDLEWARE_CLASSES=(
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +55,7 @@ settings.configure(
 
 urlpatterns = patterns(
     '',
-    url(r'', include('knowledge.urls', namespace='knowledge')),
+    url(r'', include('kb.urls', namespace='kb')),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
 )
 

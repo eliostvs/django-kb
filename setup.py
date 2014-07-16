@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import knowledge
+import kb
 
 from setuptools import setup, find_packages
 
-version = knowledge.__version__
+version = kb.__version__
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read()
@@ -13,11 +13,11 @@ history = open('HISTORY.rst').read()
 setup(
     name='django-kb',
     version=version,
-    description='Simple knowledge base made with django',
+    description='Simple kb base made with django',
     long_description=readme + '\n\n' + history,
     author='Elio Esteves Duarte',
     author_email='elio.esteves.duarte@gmail.com',
-    url='https://github.com/eliostvs/dj-knowledge',
+    url='https://github.com/eliostvs/django-kb',
     packages=find_packages(exclude=['*tests*']),
     include_package_data=True,
     install_requires=[
@@ -31,7 +31,7 @@ setup(
     ],
     license="BSD",
     zip_safe=False,
-    keywords='dj-knowledge',
+    keywords=['django', 'kb', 'knowledge base'],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',

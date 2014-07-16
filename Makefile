@@ -1,5 +1,6 @@
 VERBOSITY := 1
-LOCALPATH := $(CURDIR)/knowledge/
+NAME = 'kb'
+LOCALPATH := $(CURDIR)/$($NAME)/
 SCRIPT := manage.py
 
 .PHONY: clean test coverage report lint
