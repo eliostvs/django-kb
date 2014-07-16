@@ -46,4 +46,4 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         category = mommy.make_recipe('knowledge.tests.category_with_articles')
 
         self.assertEqual(category.articles.count(), 2)
-        self.assertEqual(category.count(), 1)
+        self.assertEqual(category.published_articles(), 1)
