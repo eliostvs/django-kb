@@ -1,5 +1,6 @@
 VERBOSITY := 1
 LOCALPATH := $(CURDIR)/knowledge/
+SCRIPT := manage.py
 
 .PHONY: clean test coverage report lint
 
@@ -10,10 +11,10 @@ clean:
 	@rm -rf whoosh_index/*
 
 test: clean
-	@python runtests.py test -v $(VERBOSITY) $(APP) --failfast
+	@python $(SCRIPT) test -v $(VERBOSITY) $(APP) --failfast
 
 coverage: clean
-	@coverage run runtests.py test --failfast
+	@coverage run $(SCRIPT) test --failfast
 
 report:
 	@coverage report -m
