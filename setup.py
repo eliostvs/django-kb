@@ -22,7 +22,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "Django>=1.6, <1.7",
-        "South>=0.8.4",
+        "South>=0.8.4, <1.0",
         "django-braces>=1.4.0",
         "django-choices>=1.1.12",
         "django-haystack>=2.1.0",
