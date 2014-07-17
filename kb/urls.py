@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, include, url
 
 from . import views
+from .settings import api_settings
 
 urlpatterns = patterns(
     '',
@@ -13,7 +14,7 @@ urlpatterns = patterns(
 
     url(r'^article/', include('kb.article.urls')),
 
-    url(r'^search/', views.SearchView(), name='search'),
+    url(r'^search/', api_settings.DEFAULT_SEARCH_VIEW_CLASS, name='search'),
 
     url(r'^vote/', include('kb.vote.urls'))
 )

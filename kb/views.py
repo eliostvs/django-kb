@@ -11,8 +11,8 @@ from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
                              CategoryUpdateView)
-from .settings import api_settings
 from .models import Article, Category
+from .settings import api_settings
 
 __all__ = [
     'ArticleListView',
@@ -44,8 +44,4 @@ class HomepageView(AddSearchFormToContextMixin,
         return context
 
 
-class SearchView(SearchView):
-    form = api_settings.DEFAULT_SEARCH_FORM_CLASS
-
-    def extra_context(self):
-        return {'search_form': api_settings.DEFAULT_SEARCH_FORM_CLASS}
+SearchView = SearchView(form_class=api_settings.DEFAULT_SEARCH_FORM_CLASS)

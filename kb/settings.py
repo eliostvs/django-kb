@@ -9,6 +9,7 @@ USER_SETTINGS = getattr(settings, 'KNOWLEDGE_SETTINGS', None)
 
 DEFAULTS = {
     'DEFAULT_SEARCH_FORM_CLASS': 'kb.forms.SearchForm',
+    'DEFAULT_SEARCH_VIEW_CLASS': 'kb.views.SearchView',
 }
 
 # borrowed from django-rest-framework
@@ -17,6 +18,7 @@ DEFAULTS = {
 # List of settings that may be in string import notation.
 IMPORT_STRINGS = (
     'DEFAULT_SEARCH_FORM_CLASS',
+    'DEFAULT_SEARCH_VIEW_CLASS',
 )
 
 
