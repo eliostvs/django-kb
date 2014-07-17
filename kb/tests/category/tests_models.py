@@ -42,7 +42,7 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         category = self.create_instance(slug='spam')
         self.assertEqual(category.get_absolute_url(), '/category/spam/')
 
-    def test_articles_count(self):
+    def test_count_articles(self):
         category = mommy.make_recipe('kb.tests.category_with_articles')
 
         self.assertEqual(category.articles.count(), 2)
