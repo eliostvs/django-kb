@@ -13,8 +13,8 @@ class CategoryManager(PassThroughManagerMixin,
     def get_queryset(self):
         return CategoryQuerySet(self.model, using=self._db)
 
-    def available(self):
+    def categories(self):
         qs = self.filter(articles__publish_state=PublishChoice.Published)
-        qs = qs.annotate(models.Count('articles'))
-        qs = qs.filter(articles__count__gt=0)
-        return qs.select_related()
+        qs = qs.annotate(count_articles=models.Count('articles'))
+        qs = qs.filter(count_articles__gt=0)
+        return qs

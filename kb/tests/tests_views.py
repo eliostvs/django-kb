@@ -30,14 +30,6 @@ class HomepageTestCase(ViewTestCase):
 
         self.assertEqual(response.context_data['search_form'], SearchForm)
 
-    def test_latest_articles(self):
-        articles = mommy.make_recipe('kb.tests.published_article', _quantity=5)
-        response = self.get()
-
-        self.assertHttpOK(response)
-        self.assertEqual(Article.objects.count(), 7)
-        self.assertSeqEqual(response.context_data['top_new'], articles)
-
     def test_top_viewed_articles(self):
         articles = mommy.make_recipe('kb.tests.published_article', _quantity=5)
 
