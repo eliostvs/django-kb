@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 
-from braces.views import LoginRequiredMixin
+from braces.views import StaffuserRequiredMixin
 
 from ..base import views
 from .forms import CategoryForm
@@ -21,7 +21,7 @@ class CategoryDetailView(views.AddSearchFormToContextMixin,
         return context
 
 
-class CategoryCreateView(LoginRequiredMixin,
+class CategoryCreateView(StaffuserRequiredMixin,
                          views.AuthorFormMixin,
                          generic.CreateView):
 
@@ -30,13 +30,13 @@ class CategoryCreateView(LoginRequiredMixin,
     success_url = reverse_lazy('kb:category_list')
 
 
-class CategoryListView(LoginRequiredMixin,
+class CategoryListView(StaffuserRequiredMixin,
                        generic.ListView):
 
     model = Category
 
 
-class CategoryUpdateView(LoginRequiredMixin,
+class CategoryUpdateView(StaffuserRequiredMixin,
                          generic.UpdateView):
 
     model = Category
@@ -44,7 +44,7 @@ class CategoryUpdateView(LoginRequiredMixin,
     success_url = reverse_lazy('kb:category_list')
 
 
-class CategoryDeleteView(LoginRequiredMixin,
+class CategoryDeleteView(StaffuserRequiredMixin,
                          generic.DeleteView):
 
     model = Category
