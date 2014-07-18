@@ -49,10 +49,13 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
 
         self.assertSeqEqual(category.published_articles(), [])
 
-        articles = [mommy.make_recipe('kb.tests.published_article', category=category)
-                    for _ in range(5)]
+        articles = [mommy.make_recipe('kb.tests.published_article',
+                                      title='Article %d' % _,
+                                      category=category)
+                    for _ in range(1, 5)]
 
-        mommy.make_recipe('kb.tests.draft_article', _quantity=2)
+        articles.reverse()
+        mommy.make_recipe('kb.tests.draft_article', _quantity=2, category=category)
 
-        self.assertSeqEqual(category.published_articles(), articles)
-        self.assertSeqEqual(category.published_articles(4), articles[1:])
+        self.assertSequenceEqual(category.published_articles(), articles)
+        self.assertSequenceEqual(category.published_articles(1), [articles[0]])

@@ -56,7 +56,7 @@ settings.configure(
 urlpatterns = patterns(
     '',
     url(r'', include('kb.urls', namespace='kb')),
-    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 )
 
 
