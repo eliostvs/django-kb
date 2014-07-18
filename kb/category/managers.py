@@ -17,4 +17,4 @@ class CategoryManager(PassThroughManagerMixin,
         qs = self.filter(articles__publish_state=PublishChoice.Published)
         qs = qs.annotate(models.Count('articles'))
         qs = qs.filter(articles__count__gt=0)
-        return qs
+        return qs.select_related()
