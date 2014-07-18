@@ -4,6 +4,7 @@ from django.db import models
 
 from model_utils.managers import PassThroughManagerMixin
 from .querysets import CategoryQuerySet
+from ..base.choices import PublishChoice
 
 
 class CategoryManager(PassThroughManagerMixin,
@@ -12,12 +13,8 @@ class CategoryManager(PassThroughManagerMixin,
     def get_queryset(self):
         return CategoryQuerySet(self.model, using=self._db)
 
-    def categories(self, exclude_subcategories=True):
-        qs = self.filter()
-
-        if exclude_subcategories:
-            qs = self.exclude(parent__isnull=False)
-
-        qs = qs.annotate(sum=models.Sum('articles'))
-        qs = qs.filter(sum__gt=0)
+    def available(self):
+        qs = self.filter(articles__publish_state=PublishChoice.Published)
+        qs = qs.annotate(models.Count('articles'))
+        qs = qs.filter(articles__count__gt=0)
         return qs

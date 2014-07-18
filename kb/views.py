@@ -37,7 +37,7 @@ class HomepageView(AddSearchFormToContextMixin,
 
     def get_context_data(self, **kwargs):
         context = super(HomepageView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.categories()
+        context['categories'] = Category.objects.available()
         context['top_new'] = Article.objects.new()
         context['top_viewed'] = Article.objects.top_viewed()
         context['top_rated'] = Article.objects.top_rated()

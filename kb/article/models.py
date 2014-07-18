@@ -20,16 +20,13 @@ class Article(behaviours.Permalinkable,
               behaviours.Publishable,
               TimeStampedModel):
 
-    title = models.CharField(_('Title'),
-                             max_length=100)
+    title = models.CharField(_('Title'), max_length=100)
 
-    category = models.ForeignKey(Category,
-                                 related_name='articles')
+    category = models.ForeignKey(Category, related_name='articles')
 
     content = models.TextField(_('Content'))
 
-    hits = models.PositiveIntegerField(_('Hits'),
-                                       default=0)
+    hits = models.PositiveIntegerField(_('Hits'), default=0)
 
     objects = ArticleManager()
     votes = Votes()

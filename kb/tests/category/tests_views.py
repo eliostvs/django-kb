@@ -20,13 +20,11 @@ class CategoryDetailViewTestCase(ViewTestCase):
         from kb.forms import SearchForm
 
         category = mommy.make_recipe('kb.tests.category_with_articles', slug='spam')
-        subcategory = mommy.make_recipe('kb.tests.subcategory', parent=category)
 
         response = self.get()
 
         self.assertHttpOK(response)
         self.assertObjectInContext(response, category)
-        self.assertSeqEqual(response.context_data['subcategories'], [subcategory])
         self.assertSeqEqual(response.context_data['articles'], Article.objects.published())
         self.assertEqual(response.context_data['search_form'], SearchForm)
 

@@ -15,17 +15,9 @@ class Category(behaviours.Permalinkable,
                behaviours.Authorable,
                TimeStampedModel):
 
-    name = models.CharField(_('Name'),
-                            max_length=100)
+    name = models.CharField(_('Name'), max_length=100)
 
-    parent = models.ForeignKey('self',
-                               null=True,
-                               blank=True,
-                               related_name='subcategories')
-
-    description = models.TextField(_('Description'),
-                                   null=True,
-                                   blank=True)
+    description = models.TextField(_('Description'), null=True, blank=True)
 
     objects = CategoryManager()
 
