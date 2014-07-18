@@ -52,3 +52,10 @@ class ArticleModelTest(test.PermalinkTestMixin,
 
         self.assertEqual(Article.objects.count(), 3)
         self.assertSeqEqual(article.related(), [published])
+
+    def test_new_articles(self):
+        articles = mommy.make_recipe('kb.tests.published_article', _quantity=6)
+        mommy.make_recipe('kb.tests.draft_article', _quantity=2)
+
+        self.assertEqual(Article.objects.count(), 8)
+        self.assertSeqEqual(Article.objects.new(), articles[1:])
