@@ -29,5 +29,5 @@ class Category(behaviours.Permalinkable,
     def __str__(self):
         return self.name
 
-    def published_articles(self, number=5):
+    def published_articles(self, number=4):
         return self.articles.published().order_by('-created')[:number]
