@@ -26,7 +26,7 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         self.assertTrue(category.name, str(category))
         self.assertTrue(category.description, 'foo')
 
-    def test_available_categories(self):
+    def test_categories_with_published_articles(self):
         c1 = mommy.make_recipe('kb.tests.category_with_articles')
         c2 = mommy.make_recipe('kb.tests.category_without_articles')
         mommy.make_recipe('kb.tests.draft_article', category=c2)
@@ -38,13 +38,13 @@ class CategoryModelTestCase(test.PermalinkTestMixin,
         category = self.create_instance(slug='spam')
         self.assertEqual(category.get_absolute_url(), '/category/spam/')
 
-    def test_articles_count(self):
+    def test_count_category_articles(self):
         category = mommy.make_recipe('kb.tests.category_with_articles')
 
         self.assertEqual(category.articles.count(), 2)
         self.assertEqual(Category.objects.categories()[0].count_articles, 1)
 
-    def test_new_articles(self):
+    def test_category_published_articles(self):
         category = mommy.make_recipe('kb.tests.category_without_articles')
 
         self.assertSeqEqual(category.published_articles(), [])
