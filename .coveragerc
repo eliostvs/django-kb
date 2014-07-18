@@ -4,4 +4,4 @@ omit =
     */migrations/*
     *admin.py
 
-source = knowledge
+source = kb
