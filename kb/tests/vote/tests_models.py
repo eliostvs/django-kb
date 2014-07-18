@@ -10,7 +10,7 @@ from kb.vote.models import Vote
 
 
 class VoteManagerTestCase(test.TimeStampedMixin,
-                          test.SeqAssertionMixin,
+                          test.SequenceAssertionMixin,
                           TestCase):
 
     def create_instance(self, **kwargs):

@@ -4,11 +4,11 @@ from django.core.urlresolvers import reverse
 
 from model_mommy import mommy
 
-from kb.base.test import LoggedUser, ViewTestCase
+from kb.base import test
 from kb.models import Article
 
 
-class CategoryDetailViewTestCase(ViewTestCase):
+class CategoryDetailViewTestCase(test.ViewTestCase):
 
     from kb.views import CategoryDetailView
 
@@ -29,7 +29,7 @@ class CategoryDetailViewTestCase(ViewTestCase):
         self.assertEqual(response.context_data['search_form'], SearchForm)
 
 
-class CategoryCreateViewTestCase(ViewTestCase):
+class CategoryCreateViewTestCase(test.ViewTestCase):
 
     from kb.views import CategoryCreateView
 
@@ -40,7 +40,7 @@ class CategoryCreateViewTestCase(ViewTestCase):
         return self.user
 
     def setUp(self):
-        self.user = mommy.make('User', username='guido')
+        self.user = mommy.make('User', username='guido', is_staff=True)
 
         category = mommy.prepare('Category', slug='eggs')
 
@@ -70,14 +70,17 @@ class CategoryCreateViewTestCase(ViewTestCase):
         self.assertRedirectToLoginWhenAnonymous()
         self.assertRedirectToLoginWhenAnonymousOnPost()
 
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
 
-class CategoryListViewTestCase(ViewTestCase):
+
+class CategoryListViewTestCase(test.ViewTestCase):
 
     from kb.views import CategoryListView
 
     view_class = CategoryListView
     view_name = 'kb:category_list'
-    view_user = LoggedUser
+    view_user = test.StaffUser
 
     def test_view(self):
         categories = mommy.make('Category', _quantity=2)
@@ -85,16 +88,21 @@ class CategoryListViewTestCase(ViewTestCase):
 
         self.assertHttpOK(response)
         self.assertObjectListInContext(response, categories)
+
         self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
+
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
 
 
-class CategoryUpdateViewTestCase(ViewTestCase):
+class CategoryUpdateViewTestCase(test.ViewTestCase):
 
     from kb.views import CategoryUpdateView
 
     view_class = CategoryUpdateView
     view_name = 'kb:category_edit'
-    view_user = LoggedUser
+    view_user = test.StaffUser
     view_kwargs = {'slug': 'spam'}
 
     def setUp(self):
@@ -113,23 +121,26 @@ class CategoryUpdateViewTestCase(ViewTestCase):
         self.assertFormClass(self.get(), CategoryForm)
         self.assertFormInvalid(self.post(data={}))
 
-        self.assertRedirectToLoginWhenAnonymous()
-        self.assertRedirectToLoginWhenAnonymousOnPost()
-
         self.assertRedirectTo(self.post(data=self.form_data),
                               reverse('kb:category_list'))
 
         category = self.refresh(self.category)
         self.assertEqual(category.name, 'Eggs')
 
+        self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
 
-class CategoryDeleteViewTestCase(ViewTestCase):
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
+
+
+class CategoryDeleteViewTestCase(test.ViewTestCase):
 
     from kb.views import CategoryDeleteView
 
     view_class = CategoryDeleteView
     view_name = 'kb:category_delete'
-    view_user = LoggedUser
+    view_user = test.StaffUser
     view_kwargs = {'slug': 'spam'}
 
     def setUp(self):
@@ -140,9 +151,12 @@ class CategoryDeleteViewTestCase(ViewTestCase):
 
         self.assertHttpOK(self.get())
 
-        self.assertRedirectToLoginWhenAnonymous()
-        self.assertRedirectToLoginWhenAnonymousOnPost()
-
         self.assertEqual(1, Category.objects.count())
         self.assertRedirectTo(self.post(), reverse('kb:category_list'))
         self.assertEqual(0, Category.objects.count())
+
+        self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
+
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()

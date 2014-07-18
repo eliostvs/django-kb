@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 
-from braces.views import LoginRequiredMixin
+from braces.views import StaffuserRequiredMixin
 
 from ..base import views
 from .forms import ArticleForm
@@ -24,14 +24,11 @@ class ArticleDetailView(views.AddSearchFormToContextMixin,
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['related'] = self.related_articles()
+        context['related'] = self.object.related(self.request.user.is_anonymous())
         return context
 
-    def related_articles(self):
-        return self.object.related(self.request.user.is_anonymous())
 
-
-class ArticleCreateView(LoginRequiredMixin,
+class ArticleCreateView(StaffuserRequiredMixin,
                         views.AuthorFormMixin,
                         generic.CreateView):
 
@@ -40,20 +37,20 @@ class ArticleCreateView(LoginRequiredMixin,
     success_url = reverse_lazy('kb:article_list')
 
 
-class ArticleListView(LoginRequiredMixin,
+class ArticleListView(StaffuserRequiredMixin,
                       generic.ListView):
 
     model = Article
 
 
-class ArticleDeleteView(LoginRequiredMixin,
+class ArticleDeleteView(StaffuserRequiredMixin,
                         generic.DeleteView):
 
     model = Article
     success_url = reverse_lazy('kb:article_list')
 
 
-class ArticleUpdateView(LoginRequiredMixin,
+class ArticleUpdateView(StaffuserRequiredMixin,
                         generic.UpdateView):
 
     model = Article

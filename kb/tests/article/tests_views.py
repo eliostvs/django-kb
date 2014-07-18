@@ -7,16 +7,17 @@ from django.core.urlresolvers import reverse
 from model_mommy import mommy
 
 from kb.models import Article
-from kb.base.test import LoggedUser, ViewTestCase
+from kb.base import test
 
 
-class TestArticleDetailView(ViewTestCase):
+class TestArticleDetailView(test.ViewTestCase):
 
     from kb.views import ArticleDetailView
 
     view_class = ArticleDetailView
     view_name = 'kb:article_detail'
     view_kwargs = {'slug': 'eggs'}
+    view_user = test.StaffUser
 
     def test_view(self):
         from kb.forms import SearchForm
@@ -38,7 +39,8 @@ class TestArticleDetailView(ViewTestCase):
     def test_draft_article(self):
         mommy.make_recipe('kb.tests.draft_article', slug='eggs')
 
-        self.assertRaises(Http404, self.get, user=LoggedUser())
+        self.assertHttpOK(self.get())
+        self.assertRaises(Http404, self.get, user=test.LoggedUser)
         self.assertRaises(Http404, self.get, user=AnonymousUser())
 
     def test_should_list_article_tags(self):
@@ -63,7 +65,7 @@ class TestArticleDetailView(ViewTestCase):
         self.assertEqual(article.hits, 1)
 
 
-class ArticleCreateViewTestCase(ViewTestCase):
+class ArticleCreateViewTestCase(test.ViewTestCase):
 
     from kb.views import ArticleCreateView
 
@@ -85,7 +87,7 @@ class ArticleCreateViewTestCase(ViewTestCase):
         }
 
     def get_user(self):
-        return mommy.make('User')
+        return mommy.make('User', is_staff=True)
 
     def test_view(self):
         from kb.forms import ArticleForm
@@ -98,26 +100,25 @@ class ArticleCreateViewTestCase(ViewTestCase):
 
         self.assertEqual(0, Article.objects.count())
 
-        user = self.get_user()
-        self.assertRedirectTo(self.post(user=user, data=self.form_data),
+        self.assertRedirectTo(self.post(data=self.form_data),
                               reverse('kb:article_list'))
 
         self.assertEqual(1, Article.objects.count())
 
-        article = Article.objects.get(pk=1)
-        self.assertEqual(article.created_by, user)
-
         self.assertRedirectToLoginWhenAnonymous()
         self.assertRedirectToLoginWhenAnonymousOnPost()
 
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
 
-class ArticleDeleteViewTestCase(ViewTestCase):
+
+class ArticleDeleteViewTestCase(test.ViewTestCase):
 
     from kb.views import ArticleDeleteView
 
     view_class = ArticleDeleteView
     view_name = 'kb:article_delete'
-    view_user = LoggedUser
+    view_user = test.StaffUser
     view_kwargs = {'slug': 'spam'}
 
     def test_view(self,):
@@ -128,36 +129,46 @@ class ArticleDeleteViewTestCase(ViewTestCase):
         self.assertEqual(1, Article.objects.count())
 
         self.assertHttpOK(self.get())
-        self.assertRedirectToLoginWhenAnonymous()
 
         self.assertRedirectTo(self.post(), reverse('kb:article_list'))
 
         self.assertEqual(0, Article.objects.count())
 
+        self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
 
-class ArticleListViewTestCase(ViewTestCase):
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
+
+
+class ArticleListViewTestCase(test.ViewTestCase):
 
     from kb.views import ArticleListView
 
     view_class = ArticleListView
     view_name = 'kb:article_list'
-    view_user = LoggedUser
+    view_user = test.StaffUser
 
     def test_view(self):
         articles = mommy.make('Article', _quantity=2)
 
         self.assertHttpOK(self.get())
         self.assertObjectListInContext(self.get(), articles)
+
         self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
+
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()
 
 
-class ArticleUpdateViewTestCase(ViewTestCase):
+class ArticleUpdateViewTestCase(test.ViewTestCase):
 
     from kb.views import ArticleUpdateView
 
     view_class = ArticleUpdateView
     view_name = 'kb:article_edit'
-    view_user = LoggedUser
+    view_user = test.StaffUser
     view_kwargs = {'slug': 'spam'}
 
     def setUp(self):
@@ -179,9 +190,6 @@ class ArticleUpdateViewTestCase(ViewTestCase):
 
         self.assertHttpOK(self.get())
 
-        self.assertRedirectToLoginWhenAnonymous()
-        self.assertRedirectToLoginWhenAnonymousOnPost()
-
         self.assertFormClass(self.get(), ArticleForm)
 
         self.assertFormInvalid(self.post(data={}))
@@ -192,3 +200,9 @@ class ArticleUpdateViewTestCase(ViewTestCase):
 
         self.assertEqual(article.title, 'Bar')
         self.assertEqual(article.content, 'Foo')
+
+        self.assertRedirectToLoginWhenAnonymous()
+        self.assertRedirectToLoginWhenAnonymousOnPost()
+
+        self.assertRedirectToLoginWhenNonStaff()
+        self.assertRedirectToLoginWhenNonStaffOnPost()

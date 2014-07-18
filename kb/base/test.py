@@ -15,6 +15,13 @@ LoggedUser.is_staff = False
 LoggedUser.username = 'Logged User'
 LoggedUser.id = 1
 
+StaffUser = Mock()
+StaffUser.is_authenticated = Mock(return_value=True)
+StaffUser.is_anonymous = Mock(return_value=False)
+StaffUser.is_staff = True
+StaffUser.username = 'Staff User'
+StaffUser.id = 1
+
 
 class StatusCodeAssertionMixin(object):
     def assertHttpCode(self, response, code, code_description):
@@ -47,14 +54,14 @@ class StatusCodeAssertionMixin(object):
             )
 
 
-class SeqAssertionMixin(object):
+class SequenceAssertionMixin(object):
 
     def assertSeqEqual(self, first, second, msg=None):
         try:
-            return super(SeqAssertionMixin, self).assertCountEqual(first, second, msg)
+            return super(SequenceAssertionMixin, self).assertCountEqual(first, second, msg)
 
         except AttributeError:
-            return super(SeqAssertionMixin, self).assertItemsEqual(first, second, msg)
+            return super(SequenceAssertionMixin, self).assertItemsEqual(first, second, msg)
 
 
 class FormAssertionMixin(object):
@@ -82,7 +89,7 @@ class FormAssertionMixin(object):
         self.assertIsInstance(form, form_class)
 
 
-class AnonymousAsssertionMixin(object):
+class AccessAsssertionsMixin(object):
 
     def assertRedirectToLoginWhenAnonymous(self):
         self.assertRedirectTo(self.get(user=AnonymousUser()),
@@ -98,8 +105,19 @@ class AnonymousAsssertionMixin(object):
     def assertHttpOkWhenAnonymous(self):
         self.assertHttpOK(self.get(user=AnonymousUser()))
 
+    def assertHttpOkWhenNonStaff(self):
+        self.assertHttpOK(self.get(user=LoggedUser))
 
-class ContextAssertionMixin(object):
+    def assertRedirectToLoginWhenNonStaff(self):
+        self.assertRedirectTo(self.get(user=LoggedUser),
+                              '{0}?next={1}'.format(self.get_login_url(), self.get_view_path()))
+
+    def assertRedirectToLoginWhenNonStaffOnPost(self):
+        self.assertRedirectTo(self.post(user=LoggedUser, data={}),
+                              '{0}?next={1}'.format(self.get_login_url(), self.get_view_path()))
+
+
+class ContextAssertionsMixin(object):
 
     def assertObjectInContext(self, response, obj, obj_name='object'):
         self.assertEqual(response.context_data[obj_name], obj)
@@ -116,10 +134,10 @@ class RefreshInstanceMixin(object):
 
 class ViewTestCase(StatusCodeAssertionMixin,
                    FormAssertionMixin,
-                   AnonymousAsssertionMixin,
-                   ContextAssertionMixin,
+                   AccessAsssertionsMixin,
+                   ContextAssertionsMixin,
                    RefreshInstanceMixin,
-                   SeqAssertionMixin,
+                   SequenceAssertionMixin,
                    TestCase):
 
     view_kwargs = None
