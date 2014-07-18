@@ -19,7 +19,9 @@ class PublishedRequiredMixin(object):
     def get_object(self, queryset=None):
         obj = super(PublishedRequiredMixin, self).get_object(queryset)
 
-        if obj.publish_state == choices.PublishChoice.Draft:
+        if all([obj.publish_state == choices.PublishChoice.Draft,
+                not self.request.user.is_staff]):
+
             raise Http404
 
         return obj

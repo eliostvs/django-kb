@@ -11,7 +11,7 @@ from kb.models import Category
 class CategoryModelTestCase(test.PermalinkTestMixin,
                             test.TimeStampedMixin,
                             test.AuthorTestMixin,
-                            test.SeqAssertionMixin,
+                            test.SequenceAssertionMixin,
                             TestCase):
 
     model = Category

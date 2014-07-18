@@ -13,7 +13,7 @@ class ArticleModelTest(test.PermalinkTestMixin,
                        test.AuthorTestMixin,
                        test.PublishableTestMixin,
                        test.RefreshInstanceMixin,
-                       test.SeqAssertionMixin,
+                       test.SequenceAssertionMixin,
                        TestCase):
 
     model = Article
