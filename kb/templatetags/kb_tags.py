@@ -8,13 +8,13 @@ register = template.Library()
 
 
 @register.assignment_tag
-def top_new_articles(num=5):
-    return Article.objects.new(num)
+def top_new_articles(num=5, category=None):
+    return Article.objects.top_new(num)
 
 
 @register.assignment_tag
-def top_viewed_articles(num=5):
-    return Article.objects.top_viewed(num)
+def top_viewed_articles(num=5, category=None):
+    return Article.objects.top_viewed(num, category)
 
 
 @register.assignment_tag

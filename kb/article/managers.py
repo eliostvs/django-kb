@@ -13,14 +13,28 @@ class ArticleManager(PassThroughManagerMixin,
     def get_queryset(self):
         return ArticleQuerySet(self.model, using=self._db)
 
-    def top_viewed(self, num=5):
-        return self.published().order_by('-hits')[:num]
+    def top_viewed(self, num=5, category=None):
+        qs = self.published()
 
-    def new(self, num=5):
-        return self.published().order_by('-created')[:num]
+        if category:
+            qs = qs.filter(category=category)
 
-    def top_rated(self, num=5):
+        return qs.order_by('-hits')[:num]
+
+    def top_new(self, num=5, category=None):
+        qs = self.published()
+
+        if category:
+            qs = qs.filter(category=category)
+
+        return qs.order_by('-created')[:num]
+
+    def top_rated(self, num=5, category=None):
         qs = self.published()
         qs = qs.annotate(sum=models.Sum('ratings__rate'))
         qs = qs.filter(sum__gt=0)
+
+        if category:
+            qs = qs.filter(category=category)
+
         return qs.order_by('-sum')[:num]

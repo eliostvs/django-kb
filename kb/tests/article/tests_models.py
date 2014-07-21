@@ -59,8 +59,8 @@ class ArticleModelTest(test.PermalinkTestMixin,
         mommy.make_recipe('kb.tests.draft_article')
 
         self.assertEqual(Article.objects.count(), 7)
-        self.assertSequenceEqual(Article.objects.new(), articles[:5])
-        self.assertSequenceEqual(Article.objects.new(1), [articles[0]])
+        self.assertSequenceEqual(Article.objects.top_new(), articles[:5])
+        self.assertSequenceEqual(Article.objects.top_new(1), [articles[0]])
 
     def test_top_rated_articles(self):
         from kb.base.choices import VoteChoice
@@ -87,3 +87,24 @@ class ArticleModelTest(test.PermalinkTestMixin,
         e.votes.add('e4', VoteChoice.Upvote)
 
         self.assertSequenceEqual(Article.objects.top_rated(), [a, b, c])
+
+    def test_filter_articles_by_category(self):
+        from kb.base.choices import VoteChoice
+
+        c1 = mommy.make_recipe('kb.tests.category_without_articles')
+        a1 = mommy.make_recipe('kb.tests.published_article', category=c1)
+        a1.votes.add('a1', VoteChoice.Upvote)
+
+        c2 = mommy.make_recipe('kb.tests.category_without_articles')
+        a2 = mommy.make_recipe('kb.tests.published_article', category=c2)
+        a2.votes.add('a2', VoteChoice.Upvote)
+
+        self.assertEqual(Article.objects.count(), 2)
+        self.assertSequenceEqual(Article.objects.top_viewed(category=c1), [a1])
+        self.assertSequenceEqual(Article.objects.top_viewed(category=c2), [a2])
+
+        self.assertSequenceEqual(Article.objects.top_rated(category=c1), [a1])
+        self.assertSequenceEqual(Article.objects.top_rated(category=c2), [a2])
+
+        self.assertSequenceEqual(Article.objects.top_new(category=c1), [a1])
+        self.assertSequenceEqual(Article.objects.top_new(category=c2), [a2])

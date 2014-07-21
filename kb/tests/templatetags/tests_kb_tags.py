@@ -58,3 +58,22 @@ class TemplateTagsTestCase(TestCase):
 
         self.assertSequenceEqual(top_rated_articles(), articles[:5])
         self.assertSequenceEqual(top_rated_articles(1), [articles[0]])
+
+    def test_tags_filtering_by_category(self):
+        from kb.base.choices import VoteChoice
+        from kb.models import Article
+
+        c1 = mommy.make_recipe('kb.tests.category_without_articles')
+        a1 = mommy.make_recipe('kb.tests.published_article', category=c1)
+        a1.votes.add('a1', VoteChoice.Upvote)
+
+        c2 = mommy.make_recipe('kb.tests.category_without_articles')
+        a2 = mommy.make_recipe('kb.tests.published_article', category=c2)
+        a2.votes.add('a2', VoteChoice.Upvote)
+
+        self.assertEqual(Article.objects.count(), 2)
+        self.assertSequenceEqual(Article.objects.top_rated(category=c1), [a1])
+        self.assertSequenceEqual(Article.objects.top_rated(category=c2), [a2])
+
+        self.assertSequenceEqual(Article.objects.top_viewed(category=c1), [a1])
+        self.assertSequenceEqual(Article.objects.top_viewed(category=c2), [a2])
