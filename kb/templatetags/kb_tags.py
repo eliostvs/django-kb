@@ -15,3 +15,8 @@ def top_new_articles(num=5):
 @register.assignment_tag
 def top_viewed_articles(num=5):
     return Article.objects.top_viewed(num)
+
+
+@register.assignment_tag
+def top_rated_articles(num=5):
+    return Article.objects.top_rated(num)
