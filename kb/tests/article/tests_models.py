@@ -101,10 +101,10 @@ class ArticleModelTest(test.PermalinkTestMixin,
 
         self.assertEqual(Article.objects.count(), 2)
         self.assertSequenceEqual(Article.objects.top_viewed(category=c1), [a1])
-        self.assertSequenceEqual(Article.objects.top_viewed(category=c2), [a2])
+        self.assertSequenceEqual(Article.objects.top_viewed(category=c2.slug), [a2])
 
         self.assertSequenceEqual(Article.objects.top_rated(category=c1), [a1])
-        self.assertSequenceEqual(Article.objects.top_rated(category=c2), [a2])
+        self.assertSequenceEqual(Article.objects.top_rated(category=c2.slug), [a2])
 
         self.assertSequenceEqual(Article.objects.top_new(category=c1), [a1])
-        self.assertSequenceEqual(Article.objects.top_new(category=c2), [a2])
+        self.assertSequenceEqual(Article.objects.top_new(category=c2.slug), [a2])
