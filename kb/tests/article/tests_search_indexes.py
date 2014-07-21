@@ -36,14 +36,14 @@ class SearchArticleTestCase(SearchViewTestCase):
         self.assertHttpOK(response)
         self.assertSeqEqual([a.object for a in object_list], Article.objects.published())
 
-    def test_search_tag_should(self):
+    def test_search_tag(self):
         response = self.get({'q': 'bar'})
         object_list = response.context['page'].object_list
 
         self.assertHttpOK(response)
         self.assertSeqEqual([a.object for a in object_list], Article.objects.published())
 
-    def test_search_draf_article(self):
+    def test_search_draf_article_should_fail(self):
         response = self.get({'q': 'draft article title'})
         object_list = response.context['page'].object_list
 
