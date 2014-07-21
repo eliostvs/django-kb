@@ -16,8 +16,8 @@ class ArticleManager(PassThroughManagerMixin,
     def top_viewed(self):
         return self.published().order_by('-hits')[:5]
 
-    def new(self):
-        return self.published().order_by('-created')[:5]
+    def new(self, num=5):
+        return self.published().order_by('-created')[:num]
 
     def top_rated(self):
         qs = self.published()
