@@ -17,4 +17,4 @@ class PublishableQueryset(models.query.QuerySet):
         return self.filter(publish_state=PublishChoice.Published)
 
     def unpublished(self):
-        return self.filter().exclude(publish_state=PublishChoice.Published)
+        return self.filter(publish_state=PublishChoice.Draft)
