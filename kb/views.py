@@ -11,7 +11,7 @@ from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
                              CategoryUpdateView)
-from .models import Article, Category
+from .models import Category
 from .settings import api_settings
 
 __all__ = [
@@ -38,8 +38,6 @@ class HomepageView(AddSearchFormToContextMixin,
     def get_context_data(self, **kwargs):
         context = super(HomepageView, self).get_context_data(**kwargs)
         context['categories'] = Category.objects.categories()
-        context['top_viewed'] = Article.objects.top_viewed()
-        context['top_rated'] = Article.objects.top_rated()
         return context
 
 

@@ -53,9 +53,37 @@ class ArticleModelTest(test.PermalinkTestMixin,
         self.assertEqual(Article.objects.count(), 3)
         self.assertSeqEqual(article.related(), [published])
 
-    def test_new_articles(self):
+    def test_top_new_articles(self):
         articles = mommy.make_recipe('kb.tests.published_article', _quantity=6)
-        mommy.make_recipe('kb.tests.draft_article', _quantity=2)
+        articles.reverse()
+        mommy.make_recipe('kb.tests.draft_article')
 
-        self.assertEqual(Article.objects.count(), 8)
-        self.assertSeqEqual(Article.objects.new(), articles[1:])
+        self.assertEqual(Article.objects.count(), 7)
+        self.assertSequenceEqual(Article.objects.new(), articles[:5])
+        self.assertSequenceEqual(Article.objects.new(1), [articles[0]])
+
+    def test_top_rated_articles(self):
+        from kb.base.choices import VoteChoice
+
+        a = mommy.make_recipe('kb.tests.published_article', title='a')
+        a.votes.add('a1', VoteChoice.Upvote)
+        a.votes.add('a2', VoteChoice.Upvote)
+        a.votes.add('a3', VoteChoice.Upvote)
+
+        b = mommy.make_recipe('kb.tests.published_article', title='b')
+        b.votes.add('b1', VoteChoice.Upvote)
+        b.votes.add('b2', VoteChoice.Upvote)
+
+        c = mommy.make_recipe('kb.tests.published_article', title='c')
+        c.votes.add('c1', VoteChoice.Upvote)
+
+        d = mommy.make_recipe('kb.tests.published_article', title='d')
+        d.votes.add('d1', VoteChoice.Downvote)
+
+        e = mommy.make_recipe('kb.tests.draft_article', title='e')
+        e.votes.add('e1', VoteChoice.Upvote)
+        e.votes.add('e2', VoteChoice.Upvote)
+        e.votes.add('e3', VoteChoice.Upvote)
+        e.votes.add('e4', VoteChoice.Upvote)
+
+        self.assertSequenceEqual(Article.objects.top_rated(), [a, b, c])
