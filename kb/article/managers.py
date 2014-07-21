@@ -13,8 +13,8 @@ class ArticleManager(PassThroughManagerMixin,
     def get_queryset(self):
         return ArticleQuerySet(self.model, using=self._db)
 
-    def top_viewed(self):
-        return self.published().order_by('-hits')[:5]
+    def top_viewed(self, num=5):
+        return self.published().order_by('-hits')[:num]
 
     def new(self, num=5):
         return self.published().order_by('-created')[:num]
