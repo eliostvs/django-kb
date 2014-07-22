@@ -3,15 +3,16 @@ from __future__ import unicode_literals
 import datetime
 
 from django.test import TestCase
-
 from model_mommy import mommy
+
+from kb.base.choices import VoteChoice
+from kb.templatetags.kbtags import (top_new_articles, top_rated_articles,
+                                    top_viewed_articles)
 
 
 class TemplateTagsTestCase(TestCase):
 
     def test_tag_top_new_articles(self):
-        from kb.templatetags.kbtags import top_new_articles
-
         articles = []
 
         for i in range(1, 7):
@@ -27,8 +28,6 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_new_articles(1), [articles[0]])
 
     def test_tag_top_viewed_articles(self):
-        from kb.templatetags.kbtags import top_viewed_articles
-
         articles = []
         for i in range(1, 7):
             articles.append(mommy.make_recipe('kb.tests.published_article', hits=i))
@@ -41,9 +40,6 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_viewed_articles(1), [articles[0]])
 
     def test_tag_top_rated_articles(self):
-        from kb.templatetags.kbtags import top_rated_articles
-        from kb.base.choices import VoteChoice
-
         articles = []
         for a in range(1, 7):
             article = mommy.make_recipe('kb.tests.published_article')
@@ -60,7 +56,6 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_rated_articles(1), [articles[0]])
 
     def test_tags_filtering_by_category(self):
-        from kb.base.choices import VoteChoice
         from kb.models import Article
 
         c1 = mommy.make_recipe('kb.tests.category_without_articles')
@@ -72,8 +67,11 @@ class TemplateTagsTestCase(TestCase):
         a2.votes.add('a2', VoteChoice.Upvote)
 
         self.assertEqual(Article.objects.count(), 2)
-        self.assertSequenceEqual(Article.objects.top_rated(category=c1), [a1])
-        self.assertSequenceEqual(Article.objects.top_rated(category=c2), [a2])
+        self.assertSequenceEqual(top_new_articles(category=c1), [a1])
+        self.assertSequenceEqual(top_new_articles(category=c2.slug), [a2])
 
-        self.assertSequenceEqual(Article.objects.top_viewed(category=c1), [a1])
-        self.assertSequenceEqual(Article.objects.top_viewed(category=c2), [a2])
+        self.assertSequenceEqual(top_rated_articles(category=c1), [a1])
+        self.assertSequenceEqual(top_rated_articles(category=c2.slug), [a2])
+
+        self.assertSequenceEqual(top_viewed_articles(category=c1), [a1])
+        self.assertSequenceEqual(top_viewed_articles(category=c2.slug), [a2])
