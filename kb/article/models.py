@@ -40,12 +40,11 @@ class Article(behaviours.Permalinkable,
     def __str__(self):
         return self.title
 
-    def related(self, public_only=False):
+    def related(self, num=5):
         qs = Article.objects.published()
         qs = qs.filter(tags__in=self.tags.all())
         qs = qs.exclude(pk=self.pk)
-
-        return qs
+        return qs[:num]
 
     def increase_hits(self):
         Article.objects.filter(pk=self.pk).update(hits=F('hits') + 1)

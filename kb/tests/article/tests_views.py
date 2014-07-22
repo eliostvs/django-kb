@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 
 from model_mommy import mommy
 
-from kb.models import Article
 from kb.base import test
 
 
@@ -24,9 +23,10 @@ class TestArticleDetailView(test.ViewTestCase):
 
         article = mommy.make_recipe('kb.tests.published_article', slug='eggs')
         published = mommy.make_recipe('kb.tests.published_article')
-        mommy.make_recipe('kb.tests.draft_article')
+        draft = mommy.make_recipe('kb.tests.draft_article')
+        mommy.make_recipe('kb.tests.published_article')
 
-        for each in Article.objects.all():
+        for each in [article, published, draft]:
             each.tags.add('Spam')
 
         response = self.get()

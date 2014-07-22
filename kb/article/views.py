@@ -24,7 +24,7 @@ class ArticleDetailView(views.AddSearchFormToContextMixin,
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['related'] = self.object.related(self.request.user.is_anonymous())
+        context['related'] = self.object.related()
         return context
 
 
