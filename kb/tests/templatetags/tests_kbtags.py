@@ -10,7 +10,7 @@ from model_mommy import mommy
 class TemplateTagsTestCase(TestCase):
 
     def test_tag_top_new_articles(self):
-        from kb.templatetags.kb_tags import top_new_articles
+        from kb.templatetags.kbtags import top_new_articles
 
         articles = []
 
@@ -27,7 +27,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_new_articles(1), [articles[0]])
 
     def test_tag_top_viewed_articles(self):
-        from kb.templatetags.kb_tags import top_viewed_articles
+        from kb.templatetags.kbtags import top_viewed_articles
 
         articles = []
         for i in range(1, 7):
@@ -41,7 +41,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_viewed_articles(1), [articles[0]])
 
     def test_tag_top_rated_articles(self):
-        from kb.templatetags.kb_tags import top_rated_articles
+        from kb.templatetags.kbtags import top_rated_articles
         from kb.base.choices import VoteChoice
 
         articles = []
