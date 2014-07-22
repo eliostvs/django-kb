@@ -24,7 +24,7 @@ class CategoryFeed(Feed):
         return obj.articles.published()
 
     def item_description(self, item):
-        return item.content
+        return item.content.rendered
 
     def item_pubdate(self, item):
         return item.created

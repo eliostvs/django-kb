@@ -124,7 +124,7 @@ class ArticleDeleteViewTestCase(test.ViewTestCase):
     def test_view(self,):
         from kb.models import Article
 
-        mommy.make('Article', slug='spam')
+        mommy.make_recipe('kb.tests.draft_article', slug='spam')
 
         self.assertEqual(1, Article.objects.count())
 
@@ -150,7 +150,7 @@ class ArticleListViewTestCase(test.ViewTestCase):
     view_user = test.StaffUser
 
     def test_view(self):
-        articles = mommy.make('Article', _quantity=2)
+        articles = mommy.make_recipe('kb.tests.draft_article', _quantity=2)
 
         self.assertHttpOK(self.get())
         self.assertObjectListInContext(self.get(), articles)
@@ -199,7 +199,8 @@ class ArticleUpdateViewTestCase(test.ViewTestCase):
         article = self.refresh(self.article)
 
         self.assertEqual(article.title, 'Bar')
-        self.assertEqual(article.content, 'Foo')
+        self.assertEqual(article.content.raw, 'Foo')
+        self.assertEqual(article.content.rendered, '<p>Foo</p>')
 
         self.assertRedirectToLoginWhenAnonymous()
         self.assertRedirectToLoginWhenAnonymousOnPost()

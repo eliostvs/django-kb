@@ -28,10 +28,11 @@ setup(
         "django-haystack>=2.1.0",
         "django-model-utils>=2.0.3",
         "django-taggit>=0.12",
+        "django-markupfield==1.2.1",
     ],
-    license="BSD",
+    license='BSD',
     zip_safe=False,
-    keywords=['django', 'kb', 'knowledge base'],
+    keywords='django,knowledge base',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',

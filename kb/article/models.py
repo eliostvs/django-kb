@@ -5,6 +5,7 @@ from django.db.models import F
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from markupfield.fields import MarkupField
 from model_utils.models import TimeStampedModel
 from taggit.managers import TaggableManager
 
@@ -24,7 +25,7 @@ class Article(behaviours.Permalinkable,
 
     category = models.ForeignKey(Category, related_name='articles')
 
-    content = models.TextField(_('Content'))
+    content = MarkupField(_('Content'), default_markup_type='markdown')
 
     hits = models.PositiveIntegerField(_('Hits'), default=0)
 

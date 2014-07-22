@@ -19,13 +19,14 @@ class ArticleModelTest(test.PermalinkTestMixin,
     model = Article
 
     def create_instance(self, **kwargs):
-        return mommy.make('Article', **kwargs)
+        return mommy.make_recipe('kb.tests.draft_article', **kwargs)
 
     def test_create_new_article(self):
-        article = self.create_instance()
+        article = self.create_instance(content='Foo')
         self.assertTrue(article.title)
         self.assertTrue(article.title, str(article))
-        self.assertTrue(article.content)
+        self.assertEqual(article.content.raw, 'Foo')
+        self.assertEqual(article.content.rendered, '<p>Foo</p>')
         self.assertTrue(article.category)
         self.assertTrue(article.tags)
 

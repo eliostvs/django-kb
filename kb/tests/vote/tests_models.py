@@ -6,7 +6,6 @@ from model_mommy import mommy
 
 from kb.base import test
 from kb.base import choices
-from kb.vote.models import Vote
 
 
 class VoteManagerTestCase(test.TimeStampedMixin,
@@ -14,10 +13,10 @@ class VoteManagerTestCase(test.TimeStampedMixin,
                           TestCase):
 
     def create_instance(self, **kwargs):
-        return mommy.make(Vote, **kwargs)
+        return mommy.make_recipe('kb.tests.vote', **kwargs)
 
     def create_article(self, **kwargs):
-        return mommy.make('Article', title='Eggs')
+        return mommy.make_recipe('kb.tests.draft_article')
 
     def test_create_new_vote(self):
         article = self.create_article()
@@ -27,7 +26,7 @@ class VoteManagerTestCase(test.TimeStampedMixin,
         self.assertIn(instance.rate, choices.VoteChoice.values)
         self.assertTrue(instance.token)
         self.assertEqual(instance.article, article)
-        self.assertEqual('Upvote from %s on Eggs' % instance.token, str(instance))
+        self.assertEqual('Upvote from %s on Draft Article Title' % instance.token, str(instance))
 
     def test_model_constraint(self):
         from django.db import IntegrityError

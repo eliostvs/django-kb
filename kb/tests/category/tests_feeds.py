@@ -43,7 +43,7 @@ class TestCategoryFeed(ViewTestCase):
         self.assertContains(response, '<description>Category With Articles Description</description>')
 
         self.assertContains(response, '<title>Published Article Title</title>')
-        self.assertContains(response, '<description>Published Article Content</description>')
+        self.assertContains(response, '<description>&lt;p&gt;Published Article Content&lt;/p&gt;</description>')
         self.assertContains(response, '<pubDate>Mon, 27 May 2013 00:00:00 +0000</pubDate>')
         self.assertContains(response, '<category>Spam</category>')
         self.assertContains(response, '<category>Eggs</category>')

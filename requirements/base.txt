@@ -1,7 +1,8 @@
-Django==1.6.5
-South==0.8.4
 django-braces==1.4.0
 django-choices==1.1.12
 django-haystack==2.1.0
+django-markupfield==1.2.1
 django-model-utils==2.0.3
 django-taggit==0.12
+Django==1.6.5
+South==0.8.4

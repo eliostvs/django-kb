@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import markdown
 
 from django.conf import settings
 from django.conf.urls import patterns, include, url
@@ -26,6 +27,7 @@ settings.configure(
         'django.contrib.staticfiles',
         'taggit',
         'haystack',
+        'markupfield',
         'kb',
         'kb.tests',
     ),
@@ -51,6 +53,9 @@ settings.configure(
         },
     },
     USE_TZ=True,
+    MARKUP_FIELD_TYPES = (
+        ('markdown', markdown.markdown),
+    )
 )
 
 urlpatterns = patterns(
