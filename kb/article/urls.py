@@ -28,6 +28,6 @@ urlpatterns = patterns(
         name='article_edit'),
 
     url(r'tag/(?P<tag>[\w-]+)/$',
-        views.ArticleTagListView.as_view(),
+        views.TagListView.as_view(),
         name='article_tag')
 )

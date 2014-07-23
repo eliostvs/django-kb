@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
 
 from django.views.generic import TemplateView
-
 from haystack.views import SearchView
 
 from .article.views import (ArticleCreateView, ArticleDeleteView,
                             ArticleDetailView, ArticleListView,
-                            ArticleTagListView, ArticleUpdateView)
+                            ArticleUpdateView, TagListView)
 from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
@@ -19,7 +18,6 @@ __all__ = [
     'ArticleDeleteView',
     'ArticleDetailView',
     'ArticleListView',
-    'ArticleTagListView',
     'ArticleUpdateView',
     'CategoryCreateView',
     'CategoryDeleteView',
@@ -28,6 +26,7 @@ __all__ = [
     'CategoryUpdateView',
     'HomepageView',
     'SearchView',
+    'TagListView',
 ]
 
 

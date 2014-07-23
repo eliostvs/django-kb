@@ -58,14 +58,15 @@ class ArticleUpdateView(StaffuserRequiredMixin,
     success_url = reverse_lazy('kb:article_list')
 
 
-class ArticleTagListView(generic.ListView):
+class TagListView(generic.ListView):
 
     slug_url_kwarg = 'tag'
     pk_url_kwarg = 'pk'
     queryset = Article.objects.published()
+    template_name = 'kb/tag_list.html'
 
     def get_queryset(self):
-        queryset = super(ArticleTagListView, self).get_queryset()
+        queryset = super(TagListView, self).get_queryset()
 
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         slug = self.kwargs.get(self.slug_url_kwarg, None)
@@ -82,3 +83,6 @@ class ArticleTagListView(generic.ListView):
                                  % self.__class__.__name__)
 
         return queryset
+
+    def get_template_names(self):
+        return [self.template_name]

@@ -94,7 +94,6 @@ class ArticleCreateViewTestCase(test.ViewTestCase):
 
     def test_view(self):
         from kb.forms import ArticleForm
-        from kb.models import Article
 
         self.assertHttpOK(self.get())
         self.assertFormClass(self.get(), ArticleForm)
@@ -213,9 +212,9 @@ class ArticleUpdateViewTestCase(test.ViewTestCase):
 
 
 class ArticleSearchByTagTestCase(test.ViewTestCase):
-    from kb.views import ArticleTagListView
+    from kb.views import TagListView
 
-    view_class = ArticleTagListView
+    view_class = TagListView
     view_name = 'kb:article_tag'
     view_kwargs = {'tag': 'python'}
 
@@ -229,6 +228,8 @@ class ArticleSearchByTagTestCase(test.ViewTestCase):
 
         response = self.get()
 
+        self.assertTemplateUsed(response, 'tag_list.html')
+        self.assertNotIn('kb/article_list.html', response.template_name)
         self.assertHttpOK(response)
         self.assertHttpOkWhenAnonymous()
         self.assertHttpOkWhenNonStaff()
