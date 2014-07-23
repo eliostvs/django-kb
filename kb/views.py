@@ -6,7 +6,7 @@ from haystack.views import SearchView
 
 from .article.views import (ArticleCreateView, ArticleDeleteView,
                             ArticleDetailView, ArticleListView,
-                            ArticleUpdateView)
+                            ArticleTagListView, ArticleUpdateView)
 from .base.views import AddSearchFormToContextMixin
 from .category.views import (CategoryCreateView, CategoryDeleteView,
                              CategoryDetailView, CategoryListView,
@@ -15,16 +15,17 @@ from .models import Category
 from .settings import api_settings
 
 __all__ = [
-    'ArticleListView',
-    'ArticleDetailView',
     'ArticleCreateView',
     'ArticleDeleteView',
+    'ArticleDetailView',
+    'ArticleListView',
+    'ArticleTagListView',
     'ArticleUpdateView',
-    'CategoryListView',
-    'CategoryDetailView',
     'CategoryCreateView',
-    'CategoryUpdateView',
     'CategoryDeleteView',
+    'CategoryDetailView',
+    'CategoryListView',
+    'CategoryUpdateView',
     'HomepageView',
     'SearchView',
 ]

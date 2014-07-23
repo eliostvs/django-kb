@@ -26,4 +26,8 @@ urlpatterns = patterns(
     url(r'^edit/(?P<slug>[\w-]+)/$',
         views.ArticleUpdateView.as_view(),
         name='article_edit'),
+
+    url(r'tag/(?P<tag>[\w-]+)/$',
+        views.ArticleTagListView.as_view(),
+        name='article_tag')
 )

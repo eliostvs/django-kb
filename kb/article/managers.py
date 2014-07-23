@@ -26,3 +26,8 @@ class ArticleManager(PassThroughManagerMixin,
         qs = qs.annotate(sum=models.Sum('ratings__rate'))
         qs = qs.filter(sum__gt=0)
         return qs.order_by('-sum')[:num]
+
+    def tag(self, tag):
+        qs = self.published()
+        qs = qs.filter(tags__name__in=[tag])
+        return qs.distinct()

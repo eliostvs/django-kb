@@ -109,3 +109,14 @@ class ArticleModelTest(test.PermalinkTestMixin,
 
         self.assertSequenceEqual(Article.objects.top_new(category=c1), [a1])
         self.assertSequenceEqual(Article.objects.top_new(category=c2.slug), [a2])
+
+    def test_filter_articles_by_tag(self):
+        p1 = mommy.make_recipe('kb.tests.published_article')
+        p2 = mommy.make_recipe('kb.tests.published_article')
+        draft = mommy.make_recipe('kb.tests.draft_article')
+
+        for a in Article.objects.all():
+            a.tags.add('python')
+
+        self.assertSeqEqual(Article.objects.all(), [p1, p2, draft])
+        self.assertSeqEqual(Article.objects.tag('python'), [p1, p2])

@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from model_mommy import mommy
 
 from kb.base import test
+from kb.models import Article
 
 
 class TestArticleDetailView(test.ViewTestCase):
@@ -32,6 +33,8 @@ class TestArticleDetailView(test.ViewTestCase):
         response = self.get()
 
         self.assertHttpOK(response)
+        self.assertHttpOkWhenAnonymous()
+        self.assertHttpOkWhenNonStaff()
         self.assertObjectInContext(response, article)
         self.assertEqual(response.context_data['search_form'], SearchForm)
         self.assertSeqEqual(response.context_data['related'], [published])
@@ -207,3 +210,28 @@ class ArticleUpdateViewTestCase(test.ViewTestCase):
 
         self.assertRedirectToLoginWhenNonStaff()
         self.assertRedirectToLoginWhenNonStaffOnPost()
+
+
+class ArticleSearchByTagTestCase(test.ViewTestCase):
+    from kb.views import ArticleTagListView
+
+    view_class = ArticleTagListView
+    view_name = 'kb:article_tag'
+    view_kwargs = {'tag': 'python'}
+
+    def test_view(self):
+        p1 = mommy.make_recipe('kb.tests.published_article')
+        p2 = mommy.make_recipe('kb.tests.published_article')
+        draft = mommy.make_recipe('kb.tests.draft_article')
+
+        for a in Article.objects.all():
+            a.tags.add('python')
+
+        response = self.get()
+
+        self.assertHttpOK(response)
+        self.assertHttpOkWhenAnonymous()
+        self.assertHttpOkWhenNonStaff()
+
+        self.assertSeqEqual(Article.objects.all(), [p1, p2, draft])
+        self.assertSeqEqual(response.context_data['object_list'], [p1, p2])
