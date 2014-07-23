@@ -215,7 +215,7 @@ class TagListViewTestCase(test.ViewTestCase):
     from kb.views import TagListView
 
     view_class = TagListView
-    view_name = 'kb:tag_list'
+    view_name = 'kb:search_tag'
     view_kwargs = {'slug': 'python'}
 
     def test_view(self):

@@ -73,7 +73,7 @@ class TagListView(views.AddSearchFormToContextMixin,
         return queryset.filter(tags__slug__in=[slug]).distinct()
 
     def get_template_names(self):
-        return 'kb/tag_list.html'
+        return 'kb/article_tag_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(TagListView, self).get_context_data(**kwargs)

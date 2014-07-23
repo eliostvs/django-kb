@@ -29,5 +29,5 @@ urlpatterns = patterns(
 
     url(r'tag/(?P<slug>[\w-]+)/$',
         views.TagListView.as_view(),
-        name='tag_list')
+        name='search_tag')
 )
