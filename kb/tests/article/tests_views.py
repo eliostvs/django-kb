@@ -219,6 +219,7 @@ class TagListViewTestCase(test.ViewTestCase):
     view_kwargs = {'slug': 'python'}
 
     def test_view(self):
+        from kb.forms import SearchForm
         from taggit.models import Tag
 
         p1 = mommy.make_recipe('kb.tests.published_article')
@@ -234,6 +235,7 @@ class TagListViewTestCase(test.ViewTestCase):
         self.assertHttpOkWhenAnonymous()
         self.assertHttpOkWhenNonStaff()
 
+        self.assertEqual(response.context_data['search_form'], SearchForm)
         self.assertTemplateUsed(response, 'kb/tag_list.html')
         self.assertNotIn('kb/article_list.html', response.template_name)
 

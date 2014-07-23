@@ -60,7 +60,8 @@ class ArticleUpdateView(StaffuserRequiredMixin,
     success_url = reverse_lazy('kb:article_list')
 
 
-class TagListView(generic.ListView):
+class TagListView(views.AddSearchFormToContextMixin,
+                  generic.ListView):
 
     slug_url_kwarg = 'slug'
     queryset = Article.objects.published()
