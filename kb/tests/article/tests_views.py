@@ -211,14 +211,16 @@ class ArticleUpdateViewTestCase(test.ViewTestCase):
         self.assertRedirectToLoginWhenNonStaffOnPost()
 
 
-class ArticleSearchByTagTestCase(test.ViewTestCase):
+class TagListViewTestCase(test.ViewTestCase):
     from kb.views import TagListView
 
     view_class = TagListView
-    view_name = 'kb:article_tag'
-    view_kwargs = {'tag': 'python'}
+    view_name = 'kb:tag_list'
+    view_kwargs = {'slug': 'python'}
 
     def test_view(self):
+        from taggit.models import Tag
+
         p1 = mommy.make_recipe('kb.tests.published_article')
         p2 = mommy.make_recipe('kb.tests.published_article')
         draft = mommy.make_recipe('kb.tests.draft_article')
@@ -228,11 +230,13 @@ class ArticleSearchByTagTestCase(test.ViewTestCase):
 
         response = self.get()
 
-        self.assertTemplateUsed(response, 'tag_list.html')
-        self.assertNotIn('kb/article_list.html', response.template_name)
         self.assertHttpOK(response)
         self.assertHttpOkWhenAnonymous()
         self.assertHttpOkWhenNonStaff()
 
+        self.assertTemplateUsed(response, 'kb/tag_list.html')
+        self.assertNotIn('kb/article_list.html', response.template_name)
+
+        self.assertIsInstance(response.context_data['tag'], Tag)
         self.assertSeqEqual(Article.objects.all(), [p1, p2, draft])
-        self.assertSeqEqual(response.context_data['object_list'], [p1, p2])
+        self.assertObjectListInContext(response, [p1, p2])

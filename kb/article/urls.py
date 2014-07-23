@@ -27,7 +27,7 @@ urlpatterns = patterns(
         views.ArticleUpdateView.as_view(),
         name='article_edit'),
 
-    url(r'tag/(?P<tag>[\w-]+)/$',
+    url(r'tag/(?P<slug>[\w-]+)/$',
         views.TagListView.as_view(),
-        name='article_tag')
+        name='tag_list')
 )

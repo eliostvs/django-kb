@@ -5,6 +5,8 @@ from django.views import generic
 
 from braces.views import StaffuserRequiredMixin
 
+from taggit.models import Tag
+
 from ..base import views
 from .forms import ArticleForm
 from .models import Article
@@ -60,15 +62,20 @@ class ArticleUpdateView(StaffuserRequiredMixin,
 
 class TagListView(generic.ListView):
 
-    slug_url_kwarg = 'tag'
+    slug_url_kwarg = 'slug'
     queryset = Article.objects.published()
-    template_name = 'kb/tag_list.html'
 
     def get_queryset(self):
         queryset = super(TagListView, self).get_queryset()
-        tag = self.kwargs.get(self.slug_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
 
-        return queryset.filter(tags__name__in=[tag]).distinct()
+        return queryset.filter(tags__slug__in=[slug]).distinct()
 
     def get_template_names(self):
-        return [self.template_name]
+        return 'kb/tag_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        context['tag'] = Tag.objects.get(slug__iexact=slug)
+        return context
