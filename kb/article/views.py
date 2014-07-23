@@ -61,28 +61,14 @@ class ArticleUpdateView(StaffuserRequiredMixin,
 class TagListView(generic.ListView):
 
     slug_url_kwarg = 'tag'
-    pk_url_kwarg = 'pk'
     queryset = Article.objects.published()
     template_name = 'kb/tag_list.html'
 
     def get_queryset(self):
         queryset = super(TagListView, self).get_queryset()
+        tag = self.kwargs.get(self.slug_url_kwarg, None)
 
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-
-        if pk is not None:
-            queryset = queryset.filter(tags__pk__in=[pk])
-
-        elif slug is not None:
-            queryset = queryset.filter(tags__name__in=[slug])
-
-        else:
-            raise AttributeError("Generic detail view %s must be called with "
-                                 "either an object pk or a slug."
-                                 % self.__class__.__name__)
-
-        return queryset
+        return queryset.filter(tags__name__in=[tag]).distinct()
 
     def get_template_names(self):
         return [self.template_name]
