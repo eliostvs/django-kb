@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 from hashlib import md5
 
 import six
+from model_mommy import mommy
 
 from kb.base.choices import VoteChoice
-from kb.base.test import ViewTestCase
-from model_mommy import mommy
+from kb.tests.test import ViewTestCase
 
 
 class VoteViewTestCase(ViewTestCase):

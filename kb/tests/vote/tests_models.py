@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-
 from model_mommy import mommy
 
-from kb.base import test
 from kb.base import choices
+from kb.tests import test
 
 
 class VoteManagerTestCase(test.TimeStampedMixin,

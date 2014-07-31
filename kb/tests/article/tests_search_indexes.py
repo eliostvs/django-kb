@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
 
 from django.core.management import call_command
-
 from model_mommy import mommy
 
-from kb.base.test import SearchViewTestCase
+from kb.tests.test import SearchViewTestCase
 from kb.models import Article
 from kb.views import SearchView
 
