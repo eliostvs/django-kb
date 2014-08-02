@@ -1,0 +1,8 @@
+# Test dependencies go here.
+-r base.txt
+coverage==3.7.1
+flake8==2.1.0
+Markdown==2.1.1
+model-mommy==1.2.1
+splinter==0.6.0
+Whoosh==2.6.0
