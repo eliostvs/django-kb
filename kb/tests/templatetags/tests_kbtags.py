@@ -10,7 +10,7 @@ from kb.templatetags.kbtags import (top_new_articles, top_rated_articles,
                                     top_viewed_articles)
 
 
-class TemplateTagsTestCase(TestCase):
+class TopArticlesTemplateTagsTestCase(TestCase):
 
     def test_tag_top_new_articles(self):
         articles = []
