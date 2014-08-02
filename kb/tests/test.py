@@ -4,9 +4,10 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
-from django.test import RequestFactory, TestCase
+from django.test import Client, LiveServerTestCase, RequestFactory, TestCase
 
 from mock import Mock
+from splinter import Browser
 
 LoggedUser = Mock()
 LoggedUser.is_authenticated = Mock(return_value=True)
@@ -151,6 +152,7 @@ class ViewTestCase(StatusCodeAssertionMixin,
     def _pre_setup(self, *args, **kwargs):
         super(ViewTestCase, self)._pre_setup(*args, **kwargs)
         self.factory = RequestFactory()
+        self.client = Client()
 
     def get_view_args(self):
         return self.view_args or ()
@@ -290,3 +292,20 @@ class PublishableTestMixin(BehaviorTestCaseMixin):
         self.assertSeqEqual(self.get_model()._default_manager.all(), [unpublished, published])
         self.assertSeqEqual(self.get_model()._default_manager.published(), [published])
         self.assertSeqEqual(self.get_model()._default_manager.unpublished(), [unpublished])
+
+
+class BaseLiveServer(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(BaseLiveServer, cls).setUpClass()
+        cls.browser = Browser('phantomjs')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.quit()
+        super(BaseLiveServer, cls).tearDownClass()
+
+    def visit(self, url):
+        full_url = '{}{}'.format(self.live_server_url, url)
+        self.browser.visit(full_url)

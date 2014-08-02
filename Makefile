@@ -14,6 +14,9 @@ clean:
 test: clean
 	@python $(SCRIPT) test -v $(VERBOSITY) $(APP) --failfast
 
+test.integration: clean
+	@python $(SCRIPT) test --pattern="integration_*.py" -v $(VERBOSITY) $(APP) --failfast
+
 coverage: clean
 	@coverage run $(SCRIPT) test --failfast
 

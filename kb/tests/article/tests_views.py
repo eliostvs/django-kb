@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 
-from django.http import Http404
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
+from django.http import Http404
+
 from model_mommy import mommy
 
 from kb.models import Article
@@ -65,6 +66,12 @@ class TestArticleDetailView(test.ViewTestCase):
         article = self.refresh(article)
 
         self.assertEqual(article.hits, 1)
+
+    def test_assert_vote_template_in_context(self):
+        mommy.make_recipe('kb.tests.published_article', slug='eggs')
+        response = self.client.get(self.get_view_path())
+
+        self.assertTemplateUsed(response, 'kb/inclusion_tags/votes.html')
 
 
 class ArticleCreateViewTestCase(test.ViewTestCase):

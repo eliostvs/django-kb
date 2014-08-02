@@ -1,0 +1,12 @@
+{% load static %}
+{% load i18n %}
+
+ <script type="text/javascript" src="{% static "kb/js/votes.js" %}"></script>
+
+<div id="votes">
+    <p>
+        <span>{% trans "Was this helpful?" %}</span>
+        <a href="{% url 'kb:vote' object.slug 1 %}" rel="nofollow" id="upvote" class="voter">{% trans "Yes" %}</a>
+        <a href="{% url 'kb:vote' object.slug -1 %}" rel="nofollow" id="downvote" class="voter">{% trans "No" %}</a>
+    </p>
+</div>

@@ -38,9 +38,11 @@ settings.configure(
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'kb.middleware.KnowledgeMiddleware',
     ),
     ROOT_URLCONF=sys.modules[__name__],
     SITE_ID=1,
+    STATIC_URL='/static/',
     PASSWORD_HASHERS=('django.contrib.auth.hashers.MD5PasswordHasher',),
     SOUTH_TESTS_MIGRATE=False,
     SOUTH_MIGRATION_MODULES={
