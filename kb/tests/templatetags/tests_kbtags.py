@@ -3,14 +3,13 @@ from __future__ import unicode_literals
 import datetime
 
 from django.test import TestCase
-from model_mommy import mommy
-
 from kb.base.choices import VoteChoice
 from kb.templatetags.kbtags import (top_new_articles, top_rated_articles,
                                     top_viewed_articles, votes)
+from model_mommy import mommy
 
 
-class TopArticlesTemplateTagsTestCase(TestCase):
+class TemplateTagsTestCase(TestCase):
 
     def test_tag_top_new_articles(self):
         articles = []
@@ -55,7 +54,7 @@ class TopArticlesTemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_rated_articles(), articles[:5])
         self.assertSequenceEqual(top_rated_articles(1), [articles[0]])
 
-    def test_tag_filtering_by_category(self):
+    def test_tops_tag_filtering_by_category(self):
         from kb.models import Article
 
         c1 = mommy.make_recipe('kb.tests.category_without_articles')
@@ -76,10 +75,7 @@ class TopArticlesTemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_viewed_articles(category=c1), [a1])
         self.assertSequenceEqual(top_viewed_articles(category=c2.slug), [a2])
 
-
-class VoteTemplateTagTestCase(TestCase):
-
-    def test_tag_template(self):
+    def test_tag_vote(self):
         context = votes({'context': True})
 
         self.assertEqual(context['vote_template'], 'kb/inclusion_tags/votes.html')
