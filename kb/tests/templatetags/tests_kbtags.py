@@ -7,7 +7,7 @@ from model_mommy import mommy
 
 from kb.base.choices import VoteChoice
 from kb.templatetags.kbtags import (top_new_articles, top_rated_articles,
-                                    top_viewed_articles)
+                                    top_viewed_articles, votes)
 
 
 class TopArticlesTemplateTagsTestCase(TestCase):
@@ -55,7 +55,7 @@ class TopArticlesTemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_rated_articles(), articles[:5])
         self.assertSequenceEqual(top_rated_articles(1), [articles[0]])
 
-    def test_tags_filtering_by_category(self):
+    def test_tag_filtering_by_category(self):
         from kb.models import Article
 
         c1 = mommy.make_recipe('kb.tests.category_without_articles')
@@ -75,3 +75,15 @@ class TopArticlesTemplateTagsTestCase(TestCase):
 
         self.assertSequenceEqual(top_viewed_articles(category=c1), [a1])
         self.assertSequenceEqual(top_viewed_articles(category=c2.slug), [a2])
+
+
+class VoteTemplateTagTestCase(TestCase):
+
+    def test_tag_template(self):
+        context = votes({'context': True})
+
+        self.assertEqual(context['vote_template'], 'kb/inclusion_tags/votes.html')
+        self.assertTrue(context['context'])
+
+        context = votes({}, template_name='kb/vote.html')
+        self.assertEqual(context['vote_template'], 'kb/vote.html')
