@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
-from django.test import RequestFactory, TestCase
+from django.test import Client, RequestFactory, TestCase
 
 from mock import Mock
 
@@ -151,6 +151,7 @@ class ViewTestCase(StatusCodeAssertionMixin,
     def _pre_setup(self, *args, **kwargs):
         super(ViewTestCase, self)._pre_setup(*args, **kwargs)
         self.factory = RequestFactory()
+        self.client = Client()
 
     def get_view_args(self):
         return self.view_args or ()
