@@ -3,4 +3,5 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
-recursive-include kb *.txt
+recursive-include kb/templates *
+recursive-include kb/static *
