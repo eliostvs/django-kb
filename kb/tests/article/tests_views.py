@@ -71,7 +71,7 @@ class TestArticleDetailView(test.ViewTestCase):
         mommy.make_recipe('kb.tests.published_article', slug='eggs')
         response = self.client.get(self.get_view_path())
 
-        self.assertTemplateUsed(response, 'kb/inclusion_tags/votes.html')
+        self.assertTemplateUsed(response, 'kb/inclusion_tags/feedback.html')
 
 
 class ArticleCreateViewTestCase(test.ViewTestCase):

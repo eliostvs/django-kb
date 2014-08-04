@@ -5,7 +5,7 @@ import datetime
 from django.test import TestCase
 from kb.base.choices import VoteChoice
 from kb.templatetags.kbtags import (top_new_articles, top_rated_articles,
-                                    top_viewed_articles, votes)
+                                    top_viewed_articles, feedback)
 from model_mommy import mommy
 
 
@@ -76,10 +76,10 @@ class TemplateTagsTestCase(TestCase):
         self.assertSequenceEqual(top_viewed_articles(category=c2.slug), [a2])
 
     def test_tag_vote(self):
-        context = votes({'context': True})
+        context = feedback({'context': True})
 
-        self.assertEqual(context['vote_template'], 'kb/inclusion_tags/votes.html')
+        self.assertEqual(context['vote_template'], 'kb/inclusion_tags/feedback.html')
         self.assertTrue(context['context'])
 
-        context = votes({}, template_name='kb/vote.html')
+        context = feedback({}, template_name='kb/vote.html')
         self.assertEqual(context['vote_template'], 'kb/vote.html')
