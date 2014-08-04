@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 
-<div id="votes">
+<div id="feedback">
     <p>
         <span>{% trans "Was this helpful?" %}</span>
         <a href="{% url 'kb:vote' object.slug 1 %}" rel="nofollow" id="upvote" class="voter">{% trans "Yes" %}</a>

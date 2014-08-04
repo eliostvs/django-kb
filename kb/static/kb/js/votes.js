@@ -5,7 +5,7 @@ if (typeof $ != 'undefined'){
         $(document).on('click', 'a.voter', function(event){
             event.preventDefault();
             var el = $(this);
-            var replace_target = $('#votes p');
+            var replace_target = $('#feedback p');
             $.get(el.attr('href'), {}, function(data){
                 replace_target.html(data.response);
             });

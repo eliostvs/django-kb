@@ -12,7 +12,7 @@ class LiveTestArticleDetailView(test.BaseLiveServer):
         self.visit(url)
 
         self.assertEqual(article.votes.total(), 0)
-        self.assertTrue(self.browser.find_by_id('votes'))
+        self.assertTrue(self.browser.find_by_id('feedback'))
         self.assertEqual(len(self.browser.find_by_css('.voter')), 2)
 
         upvote_link = self.browser.find_by_id('upvote')
