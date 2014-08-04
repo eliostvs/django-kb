@@ -28,6 +28,7 @@ settings.configure(
         'taggit',
         'haystack',
         'markupfield',
+        'south',
         'kb',
         'kb.tests',
     ),
