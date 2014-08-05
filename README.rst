@@ -69,7 +69,7 @@ All this tags accept two optional parameters, ``num`` and ``category``.
 
 This is an inclusion tag which renders links to upvote or downvote the article.
 
-To support AJAX you need to load jQuery and the ``feedback.js`` in your template, i.e.::
+To support AJAX you need to load jQuery and the ``vote.js`` in your template, i.e.::
 
     {% load staticfiles %}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
