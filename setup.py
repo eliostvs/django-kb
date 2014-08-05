@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import kb
-
 from setuptools import setup, find_packages
-
-version = kb.__version__
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read()
 
 setup(
     name='django-kb',
-    version=version,
+    version='0.0.2',
     description='Simple kb base made with django',
     long_description=readme + '\n\n' + history,
     author='Elio Esteves Duarte',
