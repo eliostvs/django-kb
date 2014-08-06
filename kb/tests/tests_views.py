@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from model_mommy import mommy
 
-from kb.base.test import ViewTestCase
+from kb.tests.test import ViewTestCase
 
 
 class HomepageTestCase(ViewTestCase):

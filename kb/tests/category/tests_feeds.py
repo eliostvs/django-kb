@@ -3,11 +3,10 @@ from __future__ import unicode_literals
 import datetime
 
 from django.http import Http404
-
 from django.utils.timezone import utc
 from model_mommy import mommy
 
-from kb.base.test import ViewTestCase
+from kb.tests.test import ViewTestCase
 from kb.models import Article
 
 

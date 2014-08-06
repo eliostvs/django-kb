@@ -2,11 +2,10 @@ from __future__ import unicode_literals
 
 from hashlib import md5
 
-import six
+from model_mommy import mommy
 
 from kb.base.choices import VoteChoice
-from kb.base.test import ViewTestCase
-from model_mommy import mommy
+from kb.tests.test import ViewTestCase
 
 
 class VoteViewTestCase(ViewTestCase):
@@ -55,10 +54,12 @@ class VoteViewTestCase(ViewTestCase):
         self.assertRaises(Http404, self.get)
 
     def test_ajax_request(self):
+        import json
+
         mommy.make_recipe('kb.tests.published_article', slug='eggs')
         response = self.get(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        self.assertEqual(response.content, six.b('{"success": true}'))
+        self.assertEqual(json.loads(response.content.decode()), {'response': 'Thank you for your feedback.'})
 
     def get_view_args(self):
         return 'eggs', self.vote

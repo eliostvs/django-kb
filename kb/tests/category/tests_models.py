@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-
 from model_mommy import mommy
 
-from kb.base import test
 from kb.models import Category
+from kb.tests import test
 
 
 class CategoryModelTestCase(test.PermalinkTestMixin,

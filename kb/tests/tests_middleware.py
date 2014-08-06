@@ -4,7 +4,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
 from django.test import TestCase
 
-from kb.base.test import LoggedUser
+from kb.tests.test import LoggedUser
 
 
 class KnowledgeMiddleareTestCase(TestCase):

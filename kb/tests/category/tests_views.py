@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
-
 from model_mommy import mommy
 
-from kb.base import test
 from kb.models import Article
+from kb.tests import test
 
 
 class CategoryDetailViewTestCase(test.ViewTestCase):

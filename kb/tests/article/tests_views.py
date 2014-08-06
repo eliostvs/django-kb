@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 
-from django.http import Http404
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
+from django.http import Http404
 
 from model_mommy import mommy
 
-from kb.base import test
 from kb.models import Article
+from kb.tests import test
 
 
 class TestArticleDetailView(test.ViewTestCase):
@@ -66,6 +66,12 @@ class TestArticleDetailView(test.ViewTestCase):
         article = self.refresh(article)
 
         self.assertEqual(article.hits, 1)
+
+    def test_assert_vote_template_in_context(self):
+        mommy.make_recipe('kb.tests.published_article', slug='eggs')
+        response = self.client.get(self.get_view_path())
+
+        self.assertTemplateUsed(response, 'kb/inclusion_tags/feedback.html')
 
 
 class ArticleCreateViewTestCase(test.ViewTestCase):
@@ -215,10 +221,11 @@ class TagListViewTestCase(test.ViewTestCase):
     from kb.views import TagListView
 
     view_class = TagListView
-    view_name = 'kb:tag_list'
+    view_name = 'kb:search_tag'
     view_kwargs = {'slug': 'python'}
 
     def test_view(self):
+        from kb.forms import SearchForm
         from taggit.models import Tag
 
         p1 = mommy.make_recipe('kb.tests.published_article')
@@ -234,7 +241,8 @@ class TagListViewTestCase(test.ViewTestCase):
         self.assertHttpOkWhenAnonymous()
         self.assertHttpOkWhenNonStaff()
 
-        self.assertTemplateUsed(response, 'kb/tag_list.html')
+        self.assertEqual(response.context_data['search_form'], SearchForm)
+        self.assertTemplateUsed(response, 'kb/search_tag.html')
         self.assertNotIn('kb/article_list.html', response.template_name)
 
         self.assertIsInstance(response.context_data['tag'], Tag)

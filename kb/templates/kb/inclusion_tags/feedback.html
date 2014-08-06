@@ -1,0 +1,10 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<div id="feedback">
+    <p>
+        <span>{% trans "Was this helpful?" %}</span>
+        <a href="{% url 'kb:vote' object.slug 1 %}" rel="nofollow" id="upvote" class="voter">{% trans "Yes" %}</a>
+        <a href="{% url 'kb:vote' object.slug -1 %}" rel="nofollow" id="downvote" class="voter">{% trans "No" %}</a>
+    </p>
+</div>

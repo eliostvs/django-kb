@@ -60,7 +60,8 @@ class ArticleUpdateView(StaffuserRequiredMixin,
     success_url = reverse_lazy('kb:article_list')
 
 
-class TagListView(generic.ListView):
+class TagListView(views.AddSearchFormToContextMixin,
+                  generic.ListView):
 
     slug_url_kwarg = 'slug'
     queryset = Article.objects.published()
@@ -72,7 +73,7 @@ class TagListView(generic.ListView):
         return queryset.filter(tags__slug__in=[slug]).distinct()
 
     def get_template_names(self):
-        return 'kb/tag_list.html'
+        return ['kb/search_tag.html']
 
     def get_context_data(self, **kwargs):
         context = super(TagListView, self).get_context_data(**kwargs)
