@@ -8,7 +8,7 @@ history = open('HISTORY.rst').read()
 
 setup(
     name='django-kb',
-    version='0.0.2',
+    version='0.1.0',
     description='Simple kb base made with django',
     long_description=readme + '\n\n' + history,
     author='Elio Esteves Duarte',
