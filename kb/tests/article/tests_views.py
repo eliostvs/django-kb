@@ -242,7 +242,7 @@ class TagListViewTestCase(test.ViewTestCase):
         self.assertHttpOkWhenNonStaff()
 
         self.assertEqual(response.context_data['search_form'], SearchForm)
-        self.assertTemplateUsed(response, 'kb/search_tag.html')
+        self.assertTemplateUsed(response, 'kb/tag_list.html')
         self.assertNotIn('kb/article_list.html', response.template_name)
 
         self.assertIsInstance(response.context_data['tag'], Tag)
