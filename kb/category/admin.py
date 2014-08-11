@@ -4,4 +4,7 @@ from django.contrib import admin
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'created'
+    list_display = ['name', 'description']
+    prepopulated_fields = {"slug": ("name",)}
+    search_fields = ['name', 'description']
