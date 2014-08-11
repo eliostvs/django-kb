@@ -1,16 +1,16 @@
-var main = function () {
+var main = function() {
 
-    $("a.voter").on("click", function (event) {
+    $('a.voter').on('click', function(event) {
         var $el = $(this);
 
-        $.get($el.attr("href"), {}, function (data) {
-            $("#feedback p").html(data.response);
+        $.get($el.attr('href'), {}, function(data) {
+            $('#feedback p').html(data.response);
         });
 
         return false;
     });
 };
 
-if (typeof $ !== "undefined") {
+if (typeof $ !== 'undefined') {
     $(document).ready(main);
 }
