@@ -230,7 +230,7 @@ class TagListViewTestCase(test.ViewTestCase):
 
         p1 = mommy.make_recipe('kb.tests.published_article')
         p2 = mommy.make_recipe('kb.tests.published_article')
-        draft = mommy.make_recipe('kb.tests.draft_article')
+        mommy.make_recipe('kb.tests.draft_article')
 
         for a in Article.objects.all():
             a.tags.add('python')
@@ -246,5 +246,22 @@ class TagListViewTestCase(test.ViewTestCase):
         self.assertNotIn('kb/article_list.html', response.template_name)
 
         self.assertIsInstance(response.context_data['tag'], Tag)
-        self.assertSeqEqual(Article.objects.all(), [p1, p2, draft])
         self.assertObjectListInContext(response, [p1, p2])
+
+        self.assertEqual(response.context_data['is_paginated'], False)
+
+    def test_paginator(self):
+        from django.core.paginator import Page, Paginator
+
+        mommy.make_recipe('kb.tests.published_article', _quantity=11)
+
+        for a in Article.objects.all():
+            a.tags.add('python')
+
+        response = self.get()
+
+        self.assertHttpOK(response)
+        self.assertEqual(response.context_data['is_paginated'], True)
+        self.assertIsInstance(response.context_data['paginator'], Paginator)
+        self.assertIsInstance(response.context_data['page_obj'], Page)
+        self.assertEqual(response.context_data['object_list'].count(), 10)

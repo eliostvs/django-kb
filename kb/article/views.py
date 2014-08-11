@@ -34,8 +34,8 @@ class ArticleCreateView(StaffuserRequiredMixin,
                         views.AuthorFormMixin,
                         generic.CreateView):
 
-    model = Article
     form_class = ArticleForm
+    model = Article
     success_url = reverse_lazy('kb:article_list')
 
 
@@ -55,16 +55,17 @@ class ArticleDeleteView(StaffuserRequiredMixin,
 class ArticleUpdateView(StaffuserRequiredMixin,
                         generic.UpdateView):
 
-    model = Article
     form_class = ArticleForm
+    model = Article
     success_url = reverse_lazy('kb:article_list')
 
 
 class TagListView(views.AddSearchFormToContextMixin,
                   generic.ListView):
 
-    slug_url_kwarg = 'slug'
+    paginate_by = 10
     queryset = Article.objects.published()
+    slug_url_kwarg = 'slug'
 
     def get_queryset(self):
         queryset = super(TagListView, self).get_queryset()
