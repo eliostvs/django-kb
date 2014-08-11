@@ -31,8 +31,8 @@ class CategoryCreateView(StaffuserRequiredMixin,
                          views.AuthorFormMixin,
                          generic.CreateView):
 
-    model = Category
     form_class = CategoryForm
+    model = Category
     success_url = reverse_lazy('kb:category_list')
 
 
@@ -45,8 +45,8 @@ class CategoryListView(StaffuserRequiredMixin,
 class CategoryUpdateView(StaffuserRequiredMixin,
                          generic.UpdateView):
 
-    model = Category
     form_class = CategoryForm
+    model = Category
     success_url = reverse_lazy('kb:category_list')
 
 
