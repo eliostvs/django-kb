@@ -24,8 +24,23 @@ class CategoryDetailViewTestCase(test.ViewTestCase):
 
         self.assertHttpOK(response)
         self.assertObjectInContext(response, category)
-        self.assertSeqEqual(response.context_data['articles'], Article.objects.published())
+        self.assertSeqEqual(response.context_data['object_list'], Article.objects.published())
+        self.assertEqual(response.context_data['is_paginated'], False)
         self.assertEqual(response.context_data['search_form'], SearchForm)
+
+    def test_paginator(self):
+        from django.core.paginator import Page, Paginator
+
+        category = mommy.make_recipe('kb.tests.category_without_articles', slug='spam')
+        mommy.make_recipe('kb.tests.published_article', category=category, _quantity=11)
+
+        response = self.get()
+
+        self.assertHttpOK(response)
+        self.assertIsInstance(response.context_data['paginator'], Paginator)
+        self.assertIsInstance(response.context_data['page_obj'], Page)
+        self.assertEqual(response.context_data['is_paginated'], True)
+        self.assertEqual(response.context_data['object_list'].count(), 10)
 
 
 class CategoryCreateViewTestCase(test.ViewTestCase):
