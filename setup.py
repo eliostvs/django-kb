@@ -25,6 +25,7 @@ setup(
         "django-model-utils>=2.2.0",
         "django-taggit>=0.12.1",
         "django-markupfield==1.2.1",
+        "pytz>=2014.4",
     ],
     license='BSD',
     zip_safe=False,
