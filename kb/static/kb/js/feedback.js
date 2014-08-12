@@ -1,18 +1,16 @@
-var main = function () {
+var main = function() {
 
-    $(document).on('click', 'a.voter', function (event) {
-        event.preventDefault();
-
+    $('a.voter').on('click', function(event) {
         var $el = $(this);
 
-        $.get($el.attr('href'), {}, function (data) {
+        $.get($el.attr('href'), {}, function(data) {
             $('#feedback p').html(data.response);
         });
 
+        return false;
     });
-
 };
 
-if (typeof $ != 'undefined') {
+if (typeof $ !== 'undefined') {
     $(document).ready(main);
 }

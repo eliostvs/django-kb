@@ -81,5 +81,11 @@ This is an inclusion tag which renders links to upvote or downvote the article.
 To support AJAX you need to load jQuery and the ``feedback.js`` in your template, i.e.::
 
     {% load staticfiles %}
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript" src="{% static "kb/js/feedback.js" %}"></script>
+
+
+Example
+-------
+
+Example of the app django-kb running on Openshift `here <https://github.com/eliostvs/django-kb-example>`_.
