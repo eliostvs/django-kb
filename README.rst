@@ -31,6 +31,12 @@ Installation
 
     $ pip install django-kb
 
+#. Configure django-taggit as described `here http://django-taggit.readthedocs.org/en/latest/getting_started.html`_.
+
+#. Configure django-haystack as described `here http://django-haystack.readthedocs.org/en/latest/tutorial.html#configuration`_.
+
+#. Configure django-markupfield as described `here https://github.com/jamesturk/django-markupfield#settings`_.
+
 #. Add ``kb`` to your ``INSTALLED_APPS`` setting.
 
 #. Add kb url include to your project's ``urls.py`` file with namespaece ``kb``::
